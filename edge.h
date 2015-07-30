@@ -23,7 +23,7 @@ using namespace cv;
 #define STEP 10//最大填充长度
 #define BLUE_FLAG 0  //非0表示显示一类缓冲区域
 #define  LTH  2
-#define  NPT 82
+#define  NPT 81
 #define  MMC 0  //MIN MAX CONSTRAIN
 #define START  1//1找起止 2找起止且局部是最值
 #define STRETCH 1//1正反都最小 2正最小 3正最近 
