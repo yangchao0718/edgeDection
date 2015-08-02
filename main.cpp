@@ -101,7 +101,7 @@ int a5[] = { 2, 1, 0, -1, -2 };
 Mat bigThanTh;
 int N1, N2;
 
-int TH1=1;
+int TH1=20;
 int calTime;
 bool find7;
 
@@ -121,7 +121,7 @@ int main(int agrc, char** agrv)
 	initMain();//first inital
 	pfindStart = findStartPt3;
 	//load srcImage
-	g_srcImage = imread(".\\sourcePicture\\test/2.jpg"); //noicePicture 2018 poisson.jpg saltpepper.bmp edgenoice.bmp gaussian.bmp
+	g_srcImage = imread(".\\sourcePicture\\test/1.jpg"); //noicePicture 2018 poisson.jpg saltpepper.bmp edgenoice.bmp gaussian.bmp
 	//load success or not
 	if (!g_srcImage.data)
 	{

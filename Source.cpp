@@ -394,7 +394,7 @@ int calcStartPixelType(Point2i centerPt){
 		nType = lengthAB(dA, dB, direction);
 		g_PType.at<int>(i, j) = nType;
 
-		if ((nType == 3 || nType == 5 || nType == 6 || nType == 4 || nType == 7) && g_PBigSmall.at<int>(centerPt.x, centerPt.y) == 1)//nType == 3 || nType == 7
+		if ((nType == 3 || nType == 6 || nType == 5 || nType == 4 || nType == 7) && g_PBigSmall.at<int>(centerPt.x, centerPt.y) == 1)//nType == 3 || nType == 7
 		{
 
 			//将起点信息添加到向量
@@ -404,9 +404,9 @@ int calcStartPixelType(Point2i centerPt){
 			tmp_S.B = B;
 			tmp_S.nType = nType;
 			tmp_S.direction = direction;
-			if (nType == 5 || nType == 6 || nType == 4)
+			if (nType == 6 || nType == 5 || nType == 4)
 			{
-				//S5.push_back(tmp_S);
+				S5.push_back(tmp_S);
 			}
 			else
 				S37.push_back(tmp_S);
@@ -736,7 +736,7 @@ bool TraceEdgeTwoBoundary3(Point2i A, Point2i B, Point2i &D, int  direction, boo
 	if (maxValue[1] <= minValue[1]) {//Take pt5 as center point,from different side find point:pt22-pt55,judge whether pt5 statisfies the bellow condition
 		{
 			if (maxValue[2] <= minValue[2])//&& minValue[1]>TH1
-			{			
+			{
 				Point2i tmp_D = position_same.at(6);
 				Point2i tmp_diff0 = position_diff.at(0);
 				//判断是不是7：水平、斜向，分为二大类：起点刚进行延伸的判断；延伸过程中的判断
@@ -1031,7 +1031,7 @@ void SemiCirleEdge(vector<Point2i>&stretchD, Point2i B, Point2i D, int tag)
 			g_edge[2].at<float>(D.x, D.y) = 0;*/
 			return;
 		}
-		if (stretchD.size()-index_S<6)
+		if (stretchD.size() - index_S < 6)
 		{
 			//clear <S,E>
 			for (int i = index_S; i < stretchD.size(); ++i)
@@ -1046,12 +1046,12 @@ void SemiCirleEdge(vector<Point2i>&stretchD, Point2i B, Point2i D, int tag)
 			//clear <stretchD>
 			/*for (int i = index_S; i < stretchD.size(); ++i)
 			{
-				SE.push_back(stretchD.at(i));
+			SE.push_back(stretchD.at(i));
 			}
 			SE.push_back(D);
 			clearShort(stretchD);*/
 		}
-	
+
 
 	}
 	else if (tagD == tag)
@@ -1898,12 +1898,12 @@ void Edge::Init()
 	int tmp=10000,absN1N2,index;
 	for (int l = 0; l < bigThanTh.rows;l++)
 	{
-		absN1N2 = abs(bigThanTh.at<int>(l, 0) - N2);
-		if (absN1N2<tmp)
-		{
-			tmp = absN1N2;
-			index = l+1;
-		}
+	absN1N2 = abs(bigThanTh.at<int>(l, 0) - N2);
+	if (absN1N2<tmp)
+	{
+	tmp = absN1N2;
+	index = l+1;
+	}
 	}
 	TH1 = index;
 	cout << "an estimated Th:" << index << endl;*/
