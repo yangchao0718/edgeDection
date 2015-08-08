@@ -231,6 +231,22 @@ int calcStartPixelType(Point2i centerPt){
 				B.y = j + a8j[indext + 1];
 				BC.x = i + a8i[indext];
 				BC.y = j + a8j[indext];
+
+				if (AC == BC)
+				{
+					g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+					g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
+					g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
+					return false;
+				}
+				if (A == B)
+				{
+					g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+					g_edge[1].at<float>(centerPt.x, centerPt.y) = 125;
+					g_edge[2].at<float>(centerPt.x, centerPt.y) = 125;
+					return false;
+				}
+
 				flagB = true;
 				break;
 
@@ -243,44 +259,42 @@ int calcStartPixelType(Point2i centerPt){
 		{
 			if (abs(CV - g_calImg.at<float>(i + a8i[indext], j + a8j[indext])) <= thresold)
 			{
-				if (abs(CV - g_calImg.at<float>(i + a8i[indext + 1], j + a8j[indext + 1])) <= thresold)
-				{
+				
 					A.x = i + a8i[indext];
 					A.y = j + a8j[indext];
 					AC.x = i + a8i[indext - 1];
 					AC.y = j + a8j[indext - 1];
 					flagA = true;
 					break;
-				}
-				else
-				{
-					indext += 1;
-				}
+				
 			}
 		}
 		for (indext = 7; indext > 0; indext--)
 		{
 			if (abs(CV - g_calImg.at<float>(i + a8i[indext], j + a8j[indext])) <= thresold)
 			{
-				int ii = indext - 1;
-				if (ii < 0)  ii += 8;
-				if (abs(CV - g_calImg.at<float>(i + a8i[ii], j + a8j[ii])) <= thresold)
-				{
+				
 					B.x = i + a8i[indext];
 					B.y = j + a8j[indext];
 					BC.x = i + a8i[indext + 1];
 					BC.y = j + a8j[indext + 1];
-					if (AC == BC)
+					if (AC == BC)//ntype==7 the rest one maybe noice or itself is a turn point
 					{
+						g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+						g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
+						g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
+						return false;
+					}
+					if (A == B)//ntype==1
+					{
+						g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+						g_edge[1].at<float>(centerPt.x, centerPt.y) = 125;
+						g_edge[2].at<float>(centerPt.x, centerPt.y) = 125;
 						return false;
 					}
 					flagB = true;
 					break;
-				}
-				else
-				{
-					indext -= 1;
-				}
+				
 
 			}
 		}
@@ -317,7 +331,7 @@ int calcStartPixelType(Point2i centerPt){
 				if (abs(tmpV - tmpC) > thresold)
 				{
 					//g_calImg.at<float>(centerPt.x + a8i[dA], centerPt.y + a8j[dA]) = tmpC;
-					return -1;
+					//return -1;
 				}
 				if (dA - 1 != dB)
 				{
@@ -336,7 +350,7 @@ int calcStartPixelType(Point2i centerPt){
 				if (abs(tmpV - tmpC) <= thresold)
 				{
 					//g_calImg.at<float>(centerPt.x + a8i[dAC], centerPt.y + a8j[dAC]) = tmpC;
-					return -1;
+					//return -1;
 				}
 			}
 
@@ -354,7 +368,7 @@ int calcStartPixelType(Point2i centerPt){
 				if (abs(tmpV - tmpC) > thresold)
 				{
 					//g_calImg.at<float>(centerPt.x + a8i[dA], centerPt.y + a8j[dA]) = tmpC;
-					return -1;
+					//return -1;
 				}
 				if (dA + 1 != dB)
 				{
@@ -373,7 +387,7 @@ int calcStartPixelType(Point2i centerPt){
 				if (abs(tmpV - tmpC) <= thresold)
 				{
 					//g_calImg.at<float>(centerPt.x + a8i[dAC], centerPt.y + a8j[dAC]) = tmpC;
-					return -1;
+					//return -1;
 				}
 			}
 		}
@@ -388,34 +402,70 @@ int calcStartPixelType(Point2i centerPt){
 		if (g_imgFlg.at<int>(A.x, A.y) || g_imgFlg.at<int>(B.x, B.y) || g_imgFlg.at<int>(AC.x, AC.y) || g_imgFlg.at<int>(BC.x, BC.y))
 			return -1;//已经处理过
 
-
 		dA = getIangle(centerPt, A);
 		dB = getIangle(centerPt, B);
 		nType = lengthAB(dA, dB, direction);
 		g_PType.at<int>(i, j) = nType;
 
-		if ((nType == 3 || nType == 6 || nType == 5 || nType == 4 || nType == 7) && g_PBigSmall.at<int>(centerPt.x, centerPt.y) == 1)//nType == 3 || nType == 7
+		if ((nType >= 1  && nType <= 7))//nType == 3 || nType == 6 || nType == 5 || nType == 4 || nType == 7
 		{
 
-			//将起点信息添加到向量
-			tmp_S.thresold = thresold;
-			tmp_S.C = centerPt;
-			tmp_S.A = A;
-			tmp_S.B = B;
-			tmp_S.nType = nType;
-			tmp_S.direction = direction;
-			if (nType == 6 || nType == 5 || nType == 4)
+
+
+			if (thresold >= TH1&&TH1 + 5 >= thresold)
 			{
-				S5.push_back(tmp_S);
+				disappearedPoint.push_back(centerPt);
+				//将起点信息添加到向量
+				/*tmp_S.thresold = thresold;
+				tmp_S.C = centerPt;
+				tmp_S.A = A;
+				tmp_S.B = B;
+				tmp_S.nType = nType;
+				tmp_S.direction = direction;
+				S37.push_back(tmp_S);*/
+			}
+			else if (thresold > TH1 + 5)
+			{
+				g_edge[0].at<float>(centerPt.x, centerPt.y) = 255;
+				g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
+				g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
+
 			}
 			else
-				S37.push_back(tmp_S);
+			{
+				//thresold too small
+				//cout << "small" << endl;
+				g_edge[0].at<float>(centerPt.x, centerPt.y) = 1;
+				g_edge[1].at<float>(centerPt.x, centerPt.y) = 1;
+				g_edge[2].at<float>(centerPt.x, centerPt.y) = 1;
+			}
+
+			//将起点信息添加到向量
+			//tmp_S.thresold = thresold;
+			//tmp_S.C = centerPt;
+			//tmp_S.A = A;
+			//tmp_S.B = B;
+			//tmp_S.nType = nType;
+			//tmp_S.direction = direction;
+			////S37.push_back(tmp_S);
+			//if (nType == 6 || nType == 5 || nType == 4)
+			//{
+			//	S5.push_back(tmp_S);
+			//}
+			//else
+			//	S37.push_back(tmp_S);
 
 		}
 
 	}
-	else
+	else//No A and B,that is to say ntype is 0 or 8,can't find a pair A/B
+	{
+		g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+		g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
+		g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
 		return -1;
+	}
+
 
 
 }
@@ -1285,7 +1335,7 @@ void Edge::edgeDetection1()
 		i = centPt.x; j = centPt.y;
 		int th = g_PTh.at<int>(i, j);
 
-		if (!tagS&&th>TH1&&isStartPt)
+		if (!tagS&&th >= TH1&&isStartPt)
 		{
 			++tag37;
 			A = S37.at(k).A;
@@ -1375,7 +1425,7 @@ void Edge::edgeDetection1()
 		i = centPt.x; j = centPt.y;
 		int th = g_PTh.at<int>(i, j);
 
-		if (!tagS&&th>TH1&&isStartPt)
+		if (!tagS&&th >= TH1&&isStartPt)
 		{
 			++tag5;
 			A = S5.at(k).A;
@@ -1455,6 +1505,26 @@ void Edge::edgeDetection1()
 
 	}
 
+	//set color to  disappearedPoint
+	vector<Point2i>::iterator first1 = disappearedPoint.begin();
+	while (first1 != disappearedPoint.end())
+	{
+		Point2i pt = *first1;
+		g_edge[0].at<float>(pt.x, pt.y) = 255;
+		g_edge[1].at<float>(pt.x, pt.y) = 0;
+		g_edge[2].at<float>(pt.x, pt.y) = 255;
+		++first1;
+	}
+	//set color to  triBranchPoints
+	//vector<Point2i>::iterator first2 = triBranchPoint.begin();
+	//while (first2 != triBranchPoint.end())
+	//{
+	//	Point2i pt = *first2;
+	//	g_edge[0].at<float>(pt.x, pt.y) = 255;
+	//	g_edge[1].at<float>(pt.x, pt.y) = 255;
+	//	g_edge[2].at<float>(pt.x, pt.y) = 0;
+	//	++first2;
+	//}
 	outXls("./output/imFlag.xls", g_imgFlg, "int");
 
 	//输出混合图像【边缘+原图】
@@ -1691,7 +1761,7 @@ void nextInitial()
 //判断是否下标越界
 bool outOfrange(int i, int j)
 {
-	if (i > 0 && i < gray.rows - 1 && j>0 && j < gray.cols - 1)
+	if (i >= 0 && i <= gray.rows - 1 && j >= 0 && j <= gray.cols - 1)
 		return false;
 	else
 	{
@@ -1704,12 +1774,16 @@ bool outOfrange(int i, int j)
 
 int  lengthAB(int A, int B, int direction)
 {
+	if (A == B)
+	{
+		return 1;
+	}
 	if (direction < 0)
 	{
-		/*if ((A+1)%8==B)
+		if ((A + 1) % 8 == B)
 		{
-		return 2;
-		}*/
+			return 2;
+		}
 		if ((A + 2) % 8 == B)
 		{
 			return 3;
@@ -1731,14 +1805,14 @@ int  lengthAB(int A, int B, int direction)
 			return 7;
 		}
 		else
-			return 0;
+			cout << "lengthAB_Error!" << endl;
 	}
 	else//逆时针,-
 	{
-		/*if( (A+2)%8==B)
+		if ((A + 7) % 8 == B)
 		{
-		return 2;
-		}*/
+			return 2;
+		}
 		if ((A + 6) % 8 == B)
 		{
 			return 3;
@@ -1760,7 +1834,7 @@ int  lengthAB(int A, int B, int direction)
 			return 7;
 		}
 		else
-			return 0;
+			cout << "lengthAB_Error!" << endl;
 	}
 
 }
@@ -2064,7 +2138,11 @@ void calcPixelAttribute(Point2i pt){
 		big_small = 1;//-----------------------------4 big_small：1为small
 	}
 
-
+	//record triBranchPoints
+	if (maxNum == 3)
+	{
+		triBranchPoint.push_back(pt);
+	}
 
 	//whether Buffer or not
 	if (maxNum > 1)

@@ -22,7 +22,7 @@ using namespace cv;
 #define LONG 6
 #define STEP 10//最大填充长度
 #define BLUE_FLAG 0  //非0表示显示一类缓冲区域
-#define  LTH  2
+#define  LTH  0
 #define  NPT 2
 #define  MMC 0  //MIN MAX CONSTRAIN
 #define START  1//1找起止 2找起止且局部是最值
@@ -80,7 +80,7 @@ extern Mat g_kernel;//核函数
 //	1, 1, 1, 1, 1, 1, 1,
 //	1, 1, 1, 1, 1, 1, 1);//核函数
 
-extern vector<Point2i> g_missedPt;
+extern vector<Point2i> disappearedPoint, triBranchPoint;
 extern vector<Mat> g_edge;
 extern vector<Mat> g_srcImageChannels, g_srcImageChannels_canny;//保存原图的通道
 extern vector<Mat> srcBGR;

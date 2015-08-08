@@ -64,7 +64,7 @@ Mat g_kernel = (Mat_<float>(5, 5) << 1, 1, 1, 1, 1,
 //	1, 1, 1, 1, 1, 1, 1,
 //	1, 1, 1, 1, 1, 1, 1);//核函数
 
-vector<Point2i> g_missedPt;
+vector<Point2i> disappearedPoint,triBranchPoint;
 vector<Mat> g_edge(3);
 vector<Mat> g_srcImageChannels, g_srcImageChannels_canny;//保存原图的通道
 vector<Mat> srcBGR(3);
