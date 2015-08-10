@@ -184,421 +184,89 @@ float absAB(Point2i A1, Point2i A2)
 	return tmp;
 }
 
-int calcStartPixelType(Point2i centerPt){
-
-	bool  flagA, flagB;//标记是否找到A/B点
-	flagA = flagB = false;
+void calcStartPixelType(Point2i centerPt){
 	int nType;
-	Point2i A, B, AC, BC;
 	startPT tmp_S;
 	int i, j;
-	int direction;
 	i = centerPt.x;
 	j = centerPt.y;
-	int thresold = g_PTh.at<int>(i, j) - 1;
-	//if (thresold<55)
-	//{
-	//	return -1;
-	//}
-	//与中心边缘点相邻的两个边缘点A，B，
+	int thresold = g_PTh.at<int>(i, j);
 	int indext;
-	float CV;
 
+	nType = g_PType.at<int>(i, j);
+	//g_PType.at<int>(i, j) = nType;
 
-	//灰度图像
-	//如果第一个点和中心点相同，则找连续两个和中点不相同的点
-	CV = g_calImg.at<float>(centerPt.x, centerPt.y);
-	if (abs(CV - g_calImg.at<float>(i, j + 1)) <= thresold){
-		for (indext = 1; indext<8; indext++)
-		{
-			if (abs(CV - g_calImg.at<float>(i + a8i[indext], j + a8j[indext]))>thresold)
-			{
-
-				A.x = i + a8i[indext - 1];
-				A.y = j + a8j[indext - 1];
-				AC.x = i + a8i[indext];
-				AC.y = j + a8j[indext];
-				flagA = true;
-				break;
-			}
-		}
-		for (indext = 7; indext > 0; indext--)
-		{
-			if (abs(CV - g_calImg.at<float>(i + a8i[indext], j + a8j[indext])) > thresold)
-			{
-
-				B.x = i + a8i[indext + 1];
-				B.y = j + a8j[indext + 1];
-				BC.x = i + a8i[indext];
-				BC.y = j + a8j[indext];
-
-				if (AC == BC)
-				{
-					g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-					g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
-					g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
-					return false;
-				}
-				if (A == B)
-				{
-					g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-					g_edge[1].at<float>(centerPt.x, centerPt.y) = 125;
-					g_edge[2].at<float>(centerPt.x, centerPt.y) = 125;
-					return false;
-				}
-
-				flagB = true;
-				break;
-
-
-			}
-		}
-	}
-	else{//如果第一个点和中心点不相同，则找连续两个和中点相同的点
-		for (indext = 1; indext < 8; indext++)
-		{
-			if (abs(CV - g_calImg.at<float>(i + a8i[indext], j + a8j[indext])) <= thresold)
-			{
-				
-					A.x = i + a8i[indext];
-					A.y = j + a8j[indext];
-					AC.x = i + a8i[indext - 1];
-					AC.y = j + a8j[indext - 1];
-					flagA = true;
-					break;
-				
-			}
-		}
-		for (indext = 7; indext > 0; indext--)
-		{
-			if (abs(CV - g_calImg.at<float>(i + a8i[indext], j + a8j[indext])) <= thresold)
-			{
-				
-					B.x = i + a8i[indext];
-					B.y = j + a8j[indext];
-					BC.x = i + a8i[indext + 1];
-					BC.y = j + a8j[indext + 1];
-					if (AC == BC)//ntype==7 the rest one maybe noice or itself is a turn point
-					{
-						g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-						g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
-						g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
-						return false;
-					}
-					if (A == B)//ntype==1
-					{
-						g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-						g_edge[1].at<float>(centerPt.x, centerPt.y) = 125;
-						g_edge[2].at<float>(centerPt.x, centerPt.y) = 125;
-						return false;
-					}
-					flagB = true;
-					break;
-				
-
-			}
-		}
-	}
-	if (flagA&&flagB)
+	if ((nType >= 3 && nType <= 7) && g_PBigSmall.at<int>(i, j) == 1)//nType == 3 || nType == 6 || nType == 5 || nType == 4 || nType == 7  &&g_PBigSmall.at<int>(i,j)==0
 	{
-		//计算Direction,若如下叉积小于0，则从半平面的顺时针开始查找
-		direction = (A.x - centerPt.x)*(AC.y - centerPt.y) - (A.y - centerPt.y)*(AC.x - centerPt.x);
 
-		//判断两个区域是否为纯净区
-		//输入：centerPt,A,B AC,BC 
-		//输出：true or false
-		//A-B区域是否<TH，AC—BC是否>TH
-		//*/没有扩展到彩色图像中
-		//--------------------------------------------------------------------------------------------------
-		int dA = getIangle(centerPt, A);
-		int dB = getIangle(centerPt, B);
-		int dAC = getIangle(centerPt, AC);
-		int dBC = getIangle(centerPt, BC);
-		int tmpV;
-		int tmpC;
-		tmpC = g_calImg.at<float>(centerPt.x, centerPt.y);
-		//is pure:else smooth noice point
-		if (direction > 0)
+		if (thresold >= TH1&&TH1 + 5 >= thresold)
 		{
-			while ((dA) != dB)
-			{
-				dA--;
-				if (dA == -1)
-				{
-					dA += 8;
-				}
-				tmpV = g_calImg.at<float>(centerPt.x + a8i[dA], centerPt.y + a8j[dA]);
-				if (abs(tmpV - tmpC) > thresold)
-				{
-					//g_calImg.at<float>(centerPt.x + a8i[dA], centerPt.y + a8j[dA]) = tmpC;
-					//return -1;
-				}
-				if (dA - 1 != dB)
-				{
-					//去除和D点相邻的点，避免标记了点，后续不能粥延伸：参见论文/每天任务/今天问题
-					//g_imgFlg.at<float>(centerPt.x + a8i[dA], centerPt.y + a8j[dA]) = 22;
-				}
-			}
-			while ((dAC) != dBC)
-			{
-				dAC++;
-				if (dAC == 8)
-				{
-					dAC -= 8;
-				}
-				tmpV = g_calImg.at<float>(centerPt.x + a8i[dAC], centerPt.y + a8j[dAC]);
-				if (abs(tmpV - tmpC) <= thresold)
-				{
-					//g_calImg.at<float>(centerPt.x + a8i[dAC], centerPt.y + a8j[dAC]) = tmpC;
-					//return -1;
-				}
-			}
-
-		}
-		else
-		{
-			while ((dA) != dB)
-			{
-				dA++;
-				if (dA == 8)
-				{
-					dA -= 8;
-				}
-				tmpV = g_calImg.at<float>(centerPt.x + a8i[dA], centerPt.y + a8j[dA]);
-				if (abs(tmpV - tmpC) > thresold)
-				{
-					//g_calImg.at<float>(centerPt.x + a8i[dA], centerPt.y + a8j[dA]) = tmpC;
-					//return -1;
-				}
-				if (dA + 1 != dB)
-				{
-					//去除和D点相邻的点，避免标记了点，后续不能粥延伸：参见论文/每天任务/今天问题
-					//g_imgFlg.at<float>(centerPt.x + a8i[dA], centerPt.y + a8j[dA]) = 22;
-				}
-			}
-			while ((dAC) != dBC)
-			{
-				dAC--;
-				if (dAC == -1)
-				{
-					dAC += 8;
-				}
-				tmpV = g_calImg.at<float>(centerPt.x + a8i[dAC], centerPt.y + a8j[dAC]);
-				if (abs(tmpV - tmpC) <= thresold)
-				{
-					//g_calImg.at<float>(centerPt.x + a8i[dAC], centerPt.y + a8j[dAC]) = tmpC;
-					//return -1;
-				}
-			}
-		}
-		//--------------------------------------------------------------------------------------------------
-
-		//得到了A、B后，计算出边缘类型
-		//把A、B点转为相对下标来求得连续长度作为边缘类型
-		if (outOfrange(A.x, A.y) || outOfrange(B.x, B.y) || outOfrange(AC.x, AC.y) || outOfrange(BC.x, BC.y))
-		{
-			return -1;//防止越界
-		}
-		if (g_imgFlg.at<int>(A.x, A.y) || g_imgFlg.at<int>(B.x, B.y) || g_imgFlg.at<int>(AC.x, AC.y) || g_imgFlg.at<int>(BC.x, BC.y))
-			return -1;//已经处理过
-
-		dA = getIangle(centerPt, A);
-		dB = getIangle(centerPt, B);
-		nType = lengthAB(dA, dB, direction);
-		g_PType.at<int>(i, j) = nType;
-
-		if ((nType >= 1  && nType <= 7))//nType == 3 || nType == 6 || nType == 5 || nType == 4 || nType == 7
-		{
-
-
-
-			if (thresold >= TH1&&TH1 + 5 >= thresold)
-			{
-				disappearedPoint.push_back(centerPt);
-				//将起点信息添加到向量
-				/*tmp_S.thresold = thresold;
-				tmp_S.C = centerPt;
-				tmp_S.A = A;
-				tmp_S.B = B;
-				tmp_S.nType = nType;
-				tmp_S.direction = direction;
-				S37.push_back(tmp_S);*/
-			}
-			else if (thresold > TH1 + 5)
-			{
-				g_edge[0].at<float>(centerPt.x, centerPt.y) = 255;
-				g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
-				g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
-
-			}
-			else
-			{
-				//thresold too small
-				//cout << "small" << endl;
-				g_edge[0].at<float>(centerPt.x, centerPt.y) = 1;
-				g_edge[1].at<float>(centerPt.x, centerPt.y) = 1;
-				g_edge[2].at<float>(centerPt.x, centerPt.y) = 1;
-			}
-
+			disappearedPoint.push_back(centerPt);
 			//将起点信息添加到向量
-			//tmp_S.thresold = thresold;
-			//tmp_S.C = centerPt;
-			//tmp_S.A = A;
-			//tmp_S.B = B;
-			//tmp_S.nType = nType;
-			//tmp_S.direction = direction;
-			////S37.push_back(tmp_S);
-			//if (nType == 6 || nType == 5 || nType == 4)
-			//{
-			//	S5.push_back(tmp_S);
-			//}
-			//else
-			//	S37.push_back(tmp_S);
-
+			/*tmp_S.thresold = thresold;
+			tmp_S.C = centerPt;
+			tmp_S.A = A;
+			tmp_S.B = B;
+			tmp_S.nType = nType;
+			tmp_S.direction = direction;
+			S37.push_back(tmp_S);*/
 		}
-
-	}
-	else//No A and B,that is to say ntype is 0 or 8,can't find a pair A/B
-	{
-		g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-		g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
-		g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
-		return -1;
-	}
-
-
-
-}
-bool findStartPt3(Point2i centerPt, Point2i &A, Point2i &B, Point2i &AC, Point2i &BC, int &direction, bool& min_max){
-	//find a start edge without noice,which include at leat 3 same type edgepoints
-	//1 find a 5_type point C and its adjacent points:A && B
-	bool  flagA, flagB;//标记是否找到A/B点
-	flagA = flagB = false;
-	int nType;
-	Point2i stPt, E;
-	int i, j;
-	int bdA, bdB, bdTmp;
-	int dx, dy;
-	i = centerPt.x;
-	j = centerPt.y;
-	int thresold = g_PTh.at<int>(i, j) - 1;
-
-	//与中心边缘点相邻的两个边缘点A，B，
-	int indext;
-	bool kflagMissed = false;
-	int dA, dB, dAC, dBC;
-	float CV;
-	int flagkk = g_imgFlg.at<int>(centerPt.x, centerPt.y);
-	if (flagkk)
-		return false;
-	int typeA, typeB;
-	int nType1;
-
-	bool isStartPt = startPoint(centerPt.x, centerPt.y);
-
-	if (flagA && flagB  && isStartPt && (nType == 3 || nType == 7) && g_PBigSmall.at<int>(i, j) == 1)//nSection(centerPt)  && isStartPt&&g_maxGrad.at<float>(i, j) >= 120   (nType == 3 || nType == 7) && thresold >= 20
-	{
-
-
-		if (!g_imgFlg.at<int>(centerPt.x, centerPt.y))//&& ptA5 && ptB5
+		else if (thresold > TH1 + 5)
 		{
-
-			if (green)
+			if (g_PBigSmall.at<int>(i, j) == 1)
 			{
-
 				g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
 				g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
 				g_edge[2].at<float>(centerPt.x, centerPt.y) = 0;
-				g_imgFlg.at<int>(centerPt.x, centerPt.y) = 5;
-			}
 
-			float comR;//比较大小
-			if (rgb)
-			{
-				comR = (srcBGR[0].at<float>(centerPt.x, centerPt.y) - srcBGR[0].at<float>(AC.x, AC.y)) +
-					(srcBGR[1].at<float>(centerPt.x, centerPt.y) - srcBGR[1].at<float>(AC.x, AC.y)) +
-					(srcBGR[2].at<float>(centerPt.x, centerPt.y) - srcBGR[2].at<float>(AC.x, AC.y));
 			}
 			else
 			{
-				g_avgACBC = (g_calImg.at<float>(AC.x, AC.y) + g_calImg.at<float>(BC.x, BC.y)) / 2;
-				//comR = g_calImg.at<float>(centerPt.x, centerPt.y) - g_avgACBC;
-				comR = -1;
-
+				g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+				g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
+				g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
 			}
-			if (comR > 0){
-				min_max = true;
-				if (virtual_edge)//大边
-				{
 
-					g_edge[0].at<float>(A.x, A.y) = 0;
-					g_edge[1].at<float>(A.x, A.y) = 0;
-					g_edge[2].at<float>(A.x, A.y) = 100;
-
-					g_edge[0].at<float>(B.x, B.y) = 0;
-					g_edge[1].at<float>(B.x, B.y) = 0;
-					g_edge[2].at<float>(B.x, B.y) = 100;
-					if (g_imgFlg.at<int>(centerPt.x, centerPt.y) == 0)
-					{
-						g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-						g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
-						g_edge[2].at<float>(centerPt.x, centerPt.y) = 100;
-					}
-
-
-				}
-				//tag start point's 8 neibor
-				for (int k = 0; k < 8; k++)
-				{
-					if (g_imgFlg.at<int>(centerPt.x + a8i[k], centerPt.y + a8j[k]) == 0)
-					{
-						g_imgFlg.at<int>(centerPt.x + a8i[k], centerPt.y + a8j[k]) = 2;
-					}
-				}
-				g_imgFlg.at<int>(A.x, A.y) = 2;
-				g_imgFlg.at<int>(centerPt.x, centerPt.y) = 2;
-				g_imgFlg.at<int>(B.x, B.y) = 2;
-
-			}
-			else{//与中心点不相同点且比中心点大的标记为黄色
-				min_max = false;
-				//*
-				if (real_edge)//小边
-				{
-					bluePt++;
-					g_edge[0].at<float>(A.x, A.y) = 0;
-					g_edge[1].at<float>(A.x, A.y) = 140;
-					g_edge[2].at<float>(A.x, A.y) = 140;
-					if (g_imgFlg.at<int>(centerPt.x, centerPt.y) == 0)
-					{
-						g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-						g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
-						g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
-					}
-					g_edge[0].at<float>(B.x, B.y) = 0;
-					g_edge[1].at<float>(B.x, B.y) = 140;
-					g_edge[2].at<float>(B.x, B.y) = 140;
-				}
-
-				g_imgFlg.at<int>(A.x, A.y) = 1;
-				g_imgFlg.at<int>(centerPt.x, centerPt.y) = 1;
-				g_imgFlg.at<int>(B.x, B.y) = 1;
-
-			}
 
 		}
 		else
-			return false;
+		{
+			//thresold too small
+			//cout << "small" << endl;
+			g_edge[0].at<float>(centerPt.x, centerPt.y) = 1;
+			g_edge[1].at<float>(centerPt.x, centerPt.y) = 1;
+			g_edge[2].at<float>(centerPt.x, centerPt.y) = 1;
+		}
 
+		if (g_PNdifference.at<int>(centerPt.x, centerPt.y) == 2 && g_PPdifference.at<int>(centerPt.x, centerPt.y) == 2)//g_PNdifference.at<int>(centerPt.x, centerPt.y) == 2 && g_PPdifference.at<int>(centerPt.x, centerPt.y) == 2
+		{
+			g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+			g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
+			g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
+		}
 
-		return true;//如果找到A、B两个边缘点则开始调用延伸追踪函数TraceEdgeTwoBoundary
+		/*g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+		g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
+		g_edge[2].at<float>(centerPt.x, centerPt.y) = 0;*/
+
+		//将起点信息添加到向量
+		/*	tmp_S.thresold = thresold;
+			tmp_S.C = centerPt;
+			tmp_S.A = A;
+			tmp_S.B = B;
+			tmp_S.nType = nType;
+			tmp_S.direction = direction;*/
+		//S37.push_back(tmp_S);
+		/*if (nType == 6 || nType == 5 || nType == 4)
+		{
+		S5.push_back(tmp_S);
+		}
+		else
+		S37.push_back(tmp_S);*/
+
 	}
-	else
-		return false;
-
 
 }
-
 
 //Input:min_max为1表示找最大，为0表示找最小
 //Output：返回最大或最小值及及相应下标,如果没找到返回-1
@@ -897,87 +565,6 @@ bool TraceEdgeTwoBoundary3(Point2i A, Point2i B, Point2i &D, int  direction, boo
 	{
 		return false;
 	}
-
-
-	//float same4_min, same4_max, diff4_min, diff4_max;
-	//float same5_min, same5_max, diff5_min, diff5_max;
-	//float same6_min, same6_max, diff6_min, diff6_max;
-
-	////other constrain
-	//if (MMC)
-	//{
-	//	if (min_max)
-	//	{
-	//		switch (type)
-	//		{
-	//		case 0:
-	//		case 3:
-	//			break;
-	//		case 4:
-	//			same4_min = findMin(same4, 4);
-	//			diff4_max = findMax(diff4, 4);
-	//			if (same4_min <= diff4_max)
-	//			{
-	//				return false;
-	//			}
-	//			break;
-	//		case 5:
-	//			same5_min = findMin(same5, 5);
-	//			diff5_max = findMax(diff5, 3);
-	//			if (same5_min <= diff5_max)
-	//			{
-	//				return false;
-	//			}
-	//			break;
-	//		case 6:
-	//			same6_min = findMin(same6, 6);
-	//			diff6_max = findMax(diff6, 2);
-	//			if (same6_min <= diff6_max)
-	//			{
-	//				return false;
-	//			}
-	//			break;
-	//		default:
-	//			cout << "this point's neighbour have nocie\n";
-	//		}
-	//	}
-	//	else
-	//	{
-	//		switch (type)
-	//		{
-	//		case 0:
-	//		case 3:
-	//			break;
-	//		case 4:
-	//			same4_max = findMax(same4, 4);
-	//			diff4_min = findMin(diff4, 4);
-	//			if (same4_max >= diff4_min)
-	//			{
-	//				return false;
-	//			}
-	//			break;
-	//		case 5:
-	//			same5_max = findMax(same5, 5);
-	//			diff5_min = findMin(diff5, 3);
-	//			if (same5_max >= diff5_min)
-	//			{
-	//				return false;
-	//			}
-	//			break;
-	//		case 6:
-	//			same6_max = findMax(same6, 6);
-	//			diff6_min = findMin(diff6, 2);
-	//			if (same6_max >= diff6_min)
-	//			{
-	//				return false;
-	//			}
-	//			break;
-	//		default:
-	//			cout << "this point's neighbour have nocie\n";
-	//		}
-	//	}
-	//}
-
 
 	if (g_imgFlg.at<int>(D.x, D.y) == 0)//no tag    && g_PBuffer.at<int>(D.x, D.y) == buffer
 	{
@@ -1366,37 +953,25 @@ void Edge::edgeDetection1()
 			g_imgFlg.at<int>(B.x, B.y) = tag37;
 
 			//3分别向两个方向进行延伸	
-			//keyi = false;
 			keyi = true;
 			stPt = centPt;
 			calTime = 0;
 			while (keyi){
-
-				//keyi = TraceEdgeTwoBoundary1(stPt, A, AC, D, E, direction);
 				AA = B;
 				keyi = TraceEdgeTwoBoundary3(stPt, A, D, direction, min_max, AA, type, tag37, stretchD1);
-
 				stretchD1.push_back(D);
-				//stretchE1.push_back(E);
-
 				stPt = A;
 				A = D;
-				//AC = E;
 			}
 			calTime = 0;
 			stPt = centPt;
-			//keyi = false;
 			keyi = true;
 			while (keyi){
-				//keyi = TraceEdgeTwoBoundary1(stPt, B, BC, D, E, -direction);
 				AA = A;
 				keyi = TraceEdgeTwoBoundary3(stPt, B, D, -direction, min_max, AA, type, tag37, stretchD2);
-
 				stretchD2.push_back(D);
-				//stretchE2.push_back(E);
 				stPt = B;
 				B = D;
-				//BC = E;
 			}
 
 			if (stretchD1.size() <= LTH&&stretchD2.size() <= LTH)
@@ -1510,21 +1085,38 @@ void Edge::edgeDetection1()
 	while (first1 != disappearedPoint.end())
 	{
 		Point2i pt = *first1;
-		g_edge[0].at<float>(pt.x, pt.y) = 255;
-		g_edge[1].at<float>(pt.x, pt.y) = 0;
-		g_edge[2].at<float>(pt.x, pt.y) = 255;
+		if (g_PBigSmall.at<int>(pt.x, pt.y) == 1)
+		{
+			g_edge[0].at<float>(pt.x, pt.y) = 255;
+			g_edge[1].at<float>(pt.x, pt.y) = 0;
+			g_edge[2].at<float>(pt.x, pt.y) = 255;
+		}
+		else
+		{
+			g_edge[0].at<float>(pt.x, pt.y) = 255;
+			g_edge[1].at<float>(pt.x, pt.y) = 0;
+			g_edge[2].at<float>(pt.x, pt.y) = 0;
+		}
+
 		++first1;
 	}
 	//set color to  triBranchPoints
-	//vector<Point2i>::iterator first2 = triBranchPoint.begin();
-	//while (first2 != triBranchPoint.end())
-	//{
-	//	Point2i pt = *first2;
-	//	g_edge[0].at<float>(pt.x, pt.y) = 255;
-	//	g_edge[1].at<float>(pt.x, pt.y) = 255;
-	//	g_edge[2].at<float>(pt.x, pt.y) = 0;
-	//	++first2;
-	//}
+	/*
+	vector<Point2i>::iterator first2 = triBranchPoint.begin();
+	while (first2 != triBranchPoint.end())
+	{
+	Point2i pt = *first2;
+	if (g_PBigSmall.at<int>(pt.x,pt.y) == 1)
+	{
+	g_edge[0].at<float>(pt.x, pt.y) = 255;
+	g_edge[1].at<float>(pt.x, pt.y) = 255;
+	g_edge[2].at<float>(pt.x, pt.y) = 0;
+	}
+
+	++first2;
+	}
+	//*/
+
 	outXls("./output/imFlag.xls", g_imgFlg, "int");
 
 	//输出混合图像【边缘+原图】
@@ -1536,21 +1128,12 @@ void Edge::edgeDetection1()
 	g_edge[2].convertTo(g_edge[2], CV_8UC1);
 	merge(g_edge, g_mergImg);
 
-	imshow("g_mergImg", g_mergImg); //imshow("listk1", listK1); imshow("listk1&&listk2", mergImg);
+	imshow("g_mergImg", g_mergImg);
 
 
 	imwrite("./output/median.bmp", g_mergImg);
-	//outxls(g_calImg, "./output/change.xls");
-
-	//g_calImg.convertTo(g_calImg, CV_8UC1);
-	//imwrite("./output/change.bmp", g_calImg);
-
 	merge(g_srcImageChannels, g_srcImageBGR);
-
-	//imshow("g_srcImageBGR", g_srcImageBGR);
 	imwrite("./output/tagEdge.bmp", g_srcImageBGR);
-
-	//(g_edge[1].clone()).convertTo(g_outEdge, CV_32F);//最终边缘图
 
 	//将得到的彩色边缘图二值化
 	Mat bimap;
@@ -1610,16 +1193,6 @@ void Edge::edgeDetection2()
 			if (g_nTypeFlag.at<int>(pt.x, pt.y) == 0)
 			{
 				nSection1(pt);
-			}
-
-			if (MIXGAT == 1)//get gt+gray && gt+type
-			{
-				if (g_gtImg.at<float>(i, j) > 0)
-				{
-					g_mixGS.at<float>(i, j) *= 100; //get gt + gray
-					g_type.at<int>(i, j) += 100;//gt + type
-					cntPixel++;
-				}
 			}
 
 		}
@@ -1737,24 +1310,20 @@ void getMix()
 }
 void nextInitial()
 {
-	//g_thresold = Mat::zeros(gray.rows, gray.cols, CV_32F);
 	g_angle = Mat::ones(gray.rows, gray.cols, CV_32F)*(-1);
 	g_intAngle = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_nTypeFlag = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_dstImage = Mat::zeros(gray.rows, gray.cols, CV_32F);
-	//g_edge[1] = Mat::zeros(gray.rows, gray.cols, CV_32F);//初始化边缘图
 	g_edge[0] = Mat::zeros(gray.rows, gray.cols, CV_32F);
 	g_edge[1] = Mat::zeros(gray.rows, gray.cols, CV_32F);
 	g_edge[2] = Mat::zeros(gray.rows, gray.cols, CV_32F);
 	g_mergImg = Mat::zeros(gray.rows, gray.cols, CV_8UC3);
 	g_type = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_srcImageBGR = Mat::zeros(gray.rows, gray.cols, CV_8UC3);
-
-	//Mat g_imgFlg(gray.rows, gray.cols, CV_32S,Scalar::all(0));
 	nTypeEdge[0] = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	nTypeEdge[1] = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	nTypeEdge[2] = Mat::zeros(gray.rows, gray.cols, CV_32S);
-	g_imgFlg = Mat::zeros(gray.rows, gray.cols, CV_32S);//图像特征标记表，32位有符号整数::::::::::::::::::::::::::::::::::为何用8位无符号整形或有符号整形就会出错
+	g_imgFlg = Mat::zeros(gray.rows, gray.cols, CV_32S);
 }
 
 
@@ -1850,9 +1419,7 @@ void Edge::Init()
 	g_type = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_angle = Mat::ones(gray.rows, gray.cols, CV_32F)*(-1);//*11可以统一改变初始值
 	g_intAngle = Mat::zeros(gray.rows, gray.cols, CV_32S);
-	//g_mixGS = Mat::zeros(gray.rows, gray.cols, CV_32F);
 	g_dstImage = Mat::zeros(gray.rows, gray.cols, CV_32F);
-	//g_edge[1] = Mat::zeros(gray.rows, gray.cols, CV_32F);//初始化边缘图
 	g_edge[0] = Mat::zeros(gray.rows, gray.cols, CV_32F);
 	g_edge[1] = Mat::zeros(gray.rows, gray.cols, CV_32F);
 	g_edge[2] = Mat::zeros(gray.rows, gray.cols, CV_32F);
@@ -1860,17 +1427,16 @@ void Edge::Init()
 	g_circle = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_srcImageBGR = Mat::zeros(gray.rows, gray.cols, CV_8UC3);
 
-	//Mat g_imgFlg(gray.rows, gray.cols, CV_32S,Scalar::all(0));
-	g_imgFlg = Mat::zeros(gray.rows, gray.cols, CV_32S);//图像特征标记表，32位有符号整数::::::::::::::::::::::::::::::::::为何用8位无符号整形或有符号整形就会出错
+	g_imgFlg = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_nTypeFlag = Mat::zeros(gray.rows, gray.cols, CV_32S);
-	g_nSectionFlg = Mat::zeros(gray.rows, gray.cols, CV_32S);//
+	g_nSectionFlg = Mat::zeros(gray.rows, gray.cols, CV_32S);
 
 	nTypeEdge[0] = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	nTypeEdge[1] = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	nTypeEdge[2] = Mat::zeros(gray.rows, gray.cols, CV_32S);
 
 
-	g_nType = Mat::ones(gray.rows, gray.cols, CV_32S) * 8;//
+	g_nType = Mat::ones(gray.rows, gray.cols, CV_32S) * 8;
 	maxminD = Mat::zeros(gray.rows, gray.cols, CV_32F);
 	opmaxminD = Mat::zeros(gray.rows, gray.cols, CV_32F);
 	g_biGrad = Mat::zeros(gray.rows, gray.cols, CV_32F);
@@ -1891,7 +1457,9 @@ void Edge::Init()
 	g_PBuffer = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_PTh = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_PType = Mat::zeros(gray.rows, gray.cols, CV_32S);
-
+	g_PNdifference = Mat::zeros(gray.rows, gray.cols, CV_32S);
+	g_PPdifference = Mat::zeros(gray.rows, gray.cols, CV_32S);
+	g_PNumbOfS = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	bigThanTh = Mat::zeros(254, 1, CV_32S);
 	//【中值滤波】
 	medianBlur(gray, g_medImg, 3);
@@ -1904,10 +1472,6 @@ void Edge::Init()
 	g_calImg.convertTo(g_calImg, CV_32F);//转换类型，便于加减运算
 	g_mixGS.convertTo(g_mixGS, CV_32F);
 
-
-
-	//namedWindow("【中值滤波】");
-	//imshow("【中值滤波】", g_medImg);
 	float tempG[8] = { 0 };
 	float maxG = 0, minG = 0;
 	int x, y;
@@ -1989,9 +1553,6 @@ void Edge::Init()
 	//showHistogram(g_maxGrad, "maxGrad");
 	//showHistogram(g_minGrad, "negative");
 
-	//get th from higram
-
-
 	//梯度图5*5>8进行个数统计
 	//filter2D(g_biGrad, g_dstBiGrad, -1, g_kernel, Point(-1, -1), 0.0, BORDER_DEFAULT);
 
@@ -2046,6 +1607,8 @@ void calcPixelAttribute(Point2i pt){
 	int point_9[9];
 	int index[9] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 	int point_vec_8_difference[8];
+	int point_9_difference[8] = { 0 };
+	int numPN = 0, numPP = 0, numPS = 0;
 	int th = 0, type, buffer = 0, big_small = 0;
 	i = pt.x;
 	j = pt.y;
@@ -2075,6 +1638,32 @@ void calcPixelAttribute(Point2i pt){
 			point_9[k] = g_calImg.at<float>(i + m, j + n);
 		}
 
+	}
+	for (int k = 0; k < 8; ++k)
+	{
+		int index;
+		int absCenterPi;
+		index = k + 1;
+		absCenterPi = abs(point_9[8] - point_9[k]);
+		if (index == 8)
+		{
+			index = 0;
+		}
+		point_9_difference[k] = point_9[index] - point_9[k];
+
+		//count numPN,numPP
+		if (point_9_difference[k] >= TH1)
+		{
+			++numPP;
+		}
+		if (point_9_difference[k] <= -TH1)
+		{
+			++numPN;
+		}
+		if (absCenterPi <= TH1)
+		{
+			++numPS;
+		}
 	}
 	InsertSort(point_9, index, 9);
 	//point_vec_9.assign(point_9, point_9 + 9);
@@ -2111,32 +1700,47 @@ void calcPixelAttribute(Point2i pt){
 		}
 	}
 
-	//calculate th
+	//calculate th to bgr
+	/*
 	int max_i1 = pt.x + a8i[index[max_index]];
 	int max_j1 = pt.y + a8j[index[max_index]];
 	int max_i2 = pt.x + a8i[index[max_index + 1]];
 	int max_j2 = pt.y + a8j[index[max_index + 1]];
 	if (rgb)
 	{
-		int th_b = abs(srcBGR.at(0).at<float>(max_i1, max_j1) - srcBGR.at(0).at<float>(max_i2, max_j2));
-		int th_g = abs(srcBGR.at(1).at<float>(max_i1, max_j1) - srcBGR.at(1).at<float>(max_i2, max_j2));
-		int th_r = abs(srcBGR.at(2).at<float>(max_i1, max_j1) - srcBGR.at(2).at<float>(max_i2, max_j2));
+	int th_b = abs(srcBGR.at(0).at<float>(max_i1, max_j1) - srcBGR.at(0).at<float>(max_i2, max_j2));
+	int th_g = abs(srcBGR.at(1).at<float>(max_i1, max_j1) - srcBGR.at(1).at<float>(max_i2, max_j2));
+	int th_r = abs(srcBGR.at(2).at<float>(max_i1, max_j1) - srcBGR.at(2).at<float>(max_i2, max_j2));
 
-		int sum = (th_b + th_g + th_r);//------------------------------1 th
-		if (sum)
+	int sum = (th_b + th_g + th_r);//------------------------------1 th
+	if (sum)
+	{
+	th = ((float)th_b / sum)*th_b + ((float)th_g / sum)*th_g + ((float)th_r / sum)*th_r;
+	}
+	else
+	th = 0;
+	}
+	//*/
+	if (th < TH1)
+	{
+		type = 8;
+	}
+	else
+	{
+		//calculate Type and big_small
+		if (centerPoint_index <= max_index)
 		{
-			th = ((float)th_b / sum)*th_b + ((float)th_g / sum)*th_g + ((float)th_r / sum)*th_r;
+			type = max_index;//--------------------------2 type
+			big_small = 1;//-----------------------------4 big_small：1为small
 		}
 		else
-			th = 0;
+		{
+			type = 7 - max_index;//--------------------------2 type
+			//big_small = 1;//-----------------------------4 big_small：1为small
+		}
 	}
 
-	//calculate Type and big_small
-	if (centerPoint_index <= max_index)
-	{
-		//type = max_index;//--------------------------2 type
-		big_small = 1;//-----------------------------4 big_small：1为small
-	}
+
 
 	//record triBranchPoints
 	if (maxNum == 3)
@@ -2153,10 +1757,12 @@ void calcPixelAttribute(Point2i pt){
 	//assign
 
 	g_PTh.at<int>(i, j) = th;
+	g_PType.at<int>(i, j) = type;
 	g_PBuffer.at<int>(i, j) = buffer;
 	g_PBigSmall.at<int>(i, j) = big_small;
-
-
+	g_PPdifference.at<int>(i, j) = numPP;
+	g_PNdifference.at<int>(i, j) = numPN;
+	g_PNumbOfS.at<int>(i, j) = numPS;
 }
 //Canny检测函数
 void Edge::on_Canny(int, void*)
@@ -2309,18 +1915,10 @@ int getIangle(Point2i centPt, Point2i A)
 
 void initMain()
 {
-	//system("color 2f");//设置控制台背影颜色
+	system("color 2f");//设置控制台背影颜色
 	//---------------------------------------------------------------
-
 	//接口控制函数，1表示是，0表示否
-	controlFuction(10,//黄色边
-		10,//是否减边，红色
-		0,//是否实边填充,1为实边填充，0为隐边填充
-		0,//是否填充邻边
-		10,//是否显示初始绿点
-		1,//是否导出数据
-		0,//是否显示叠加色
-		0);//是否添加噪音
+	controlFuction();//是否添加噪音
 	//---------------------------------------------------------------
 
 }
@@ -2477,9 +2075,6 @@ int nSection(Point2i centPt)
 	if (n1&&n2&&n3)
 	{
 		//
-
-
-
 		for (int k = 0; k < 8; k++)
 		{
 			/*g_edge[0].at<float>(centPt.x + a8i[k], centPt.y + a8j[k])=255;
@@ -2676,7 +2271,6 @@ int nSection1(Point2i centPt)
 		}
 	}
 
-
 	if (n2 > 0 && n2 < 8)
 	{
 		if (n1 > 0)
@@ -2800,18 +2394,10 @@ int maxSeqence(vector <int> &ind)
 	maxLength = findMax(max, 6);
 	return maxLength;//返回连续长度
 }
-void controlFuction(bool n1, bool n2, bool n3, bool n4, bool n5, bool n6, bool n7, bool n8)
+void controlFuction()
 {
-	real_edge = n1;
-	virtual_edge = n2;
-	real_fill = n3;
-	bufill = n4;
-	green = n5;
-	xls = n6;
-	init_edge = n7;
-	noice = n8;
-}
 
+}
 
 void getTypeEdge()
 {
@@ -3063,7 +2649,6 @@ Point2i normalToXY(float nv)
 	}
 	return P;
 }
-//填充邻边
 
 float sum(Mat mat, int n)
 {
