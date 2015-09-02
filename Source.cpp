@@ -196,76 +196,106 @@ void calcStartPixelType(Point2i centerPt){
 	nType = g_PType.at<int>(i, j);
 	//g_PType.at<int>(i, j) = nType;
 
-	if ((nType >= 3 && nType <= 7) && g_PBigSmall.at<int>(i, j) == 1)//nType == 3 || nType == 6 || nType == 5 || nType == 4 || nType == 7  &&g_PBigSmall.at<int>(i,j)==0
-	{
 
-		if (thresold >= TH1&&TH1 + 5 >= thresold)
-		{
-			disappearedPoint.push_back(centerPt);
-			//将起点信息添加到向量
-			/*tmp_S.thresold = thresold;
-			tmp_S.C = centerPt;
-			tmp_S.A = A;
-			tmp_S.B = B;
-			tmp_S.nType = nType;
-			tmp_S.direction = direction;
-			S37.push_back(tmp_S);*/
-		}
-		else if (thresold > TH1 + 5)
-		{
-			if (g_PBigSmall.at<int>(i, j) == 1)
-			{
-				g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-				g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
-				g_edge[2].at<float>(centerPt.x, centerPt.y) = 0;
+	//if ((nType >= 3 && nType <= 7) && g_PBigSmall.at<int>(i, j) == 1)//nType == 3 || nType == 6 || nType == 5 || nType == 4 || nType == 7  &&g_PBigSmall.at<int>(i,j)==0
+	//{
 
-			}
-			else
-			{
-				g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-				g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
-				g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
-			}
+	//	if (thresold >= TH1&&TH1 + 5 >= thresold)
+	//	{
+	//		disappearedPoint.push_back(centerPt);
+	//		//将起点信息添加到向量
+	//		/*tmp_S.thresold = thresold;
+	//		tmp_S.C = centerPt;
+	//		tmp_S.A = A;
+	//		tmp_S.B = B;
+	//		tmp_S.nType = nType;
+	//		tmp_S.direction = direction;
+	//		S37.push_back(tmp_S);*/
+	//	}
+	//	else if (thresold > TH1 + 5)
+	//	{
+	//		if (g_PBigSmall.at<int>(i, j) == 1)
+	//		{
+	//			g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+	//			g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
+	//			g_edge[2].at<float>(centerPt.x, centerPt.y) = 0;
+
+	//		}
+	//		else
+	//		{
+	//			g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+	//			g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
+	//			g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
+	//		}
 
 
-		}
-		else
-		{
-			//thresold too small
-			//cout << "small" << endl;
-			g_edge[0].at<float>(centerPt.x, centerPt.y) = 1;
-			g_edge[1].at<float>(centerPt.x, centerPt.y) = 1;
-			g_edge[2].at<float>(centerPt.x, centerPt.y) = 1;
-		}
+	//	}
+	//	else
+	//	{
+	//		//thresold too small
+	//		//cout << "small" << endl;
+	//		g_edge[0].at<float>(centerPt.x, centerPt.y) = 1;
+	//		g_edge[1].at<float>(centerPt.x, centerPt.y) = 1;
+	//		g_edge[2].at<float>(centerPt.x, centerPt.y) = 1;
+	//	}
 
-		if (g_PNdifference.at<int>(centerPt.x, centerPt.y) == 2 && g_PPdifference.at<int>(centerPt.x, centerPt.y) == 2)//g_PNdifference.at<int>(centerPt.x, centerPt.y) == 2 && g_PPdifference.at<int>(centerPt.x, centerPt.y) == 2
-		{
-			g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-			g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
-			g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
-		}
+	//	if (g_PNdifference.at<int>(centerPt.x, centerPt.y) == 2 && g_PPdifference.at<int>(centerPt.x, centerPt.y) == 2)//g_PNdifference.at<int>(centerPt.x, centerPt.y) == 2 && g_PPdifference.at<int>(centerPt.x, centerPt.y) == 2
+	//	{
+	//		g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+	//		g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
+	//		g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
+	//	}
 
-		/*g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
-		g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
-		g_edge[2].at<float>(centerPt.x, centerPt.y) = 0;*/
+	//	/*g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+	//	g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
+	//	g_edge[2].at<float>(centerPt.x, centerPt.y) = 0;*/
 
-		//将起点信息添加到向量
-		/*	tmp_S.thresold = thresold;
-			tmp_S.C = centerPt;
-			tmp_S.A = A;
-			tmp_S.B = B;
-			tmp_S.nType = nType;
-			tmp_S.direction = direction;*/
-		//S37.push_back(tmp_S);
-		/*if (nType == 6 || nType == 5 || nType == 4)
-		{
-		S5.push_back(tmp_S);
-		}
-		else
-		S37.push_back(tmp_S);*/
+	//	//将起点信息添加到向量
+	//	/*	tmp_S.thresold = thresold;
+	//		tmp_S.C = centerPt;
+	//		tmp_S.A = A;
+	//		tmp_S.B = B;
+	//		tmp_S.nType = nType;
+	//		tmp_S.direction = direction;*/
+	//	//S37.push_back(tmp_S);
+	//	/*if (nType == 6 || nType == 5 || nType == 4)
+	//	{
+	//	S5.push_back(tmp_S);
+	//	}
+	//	else
+	//	S37.push_back(tmp_S);*/
 
-	}
+	//}
 
+	//if (g_PNumbOfS.at<int>(i, j) >= 2 && g_PNumbOfS.at<int>(i, j) <= 7)
+	//{
+	//	if (g_PBigSmall.at<int>(i, j) == 1)
+	//	{
+	//		g_edge[0].at<float>(centerPt.x, centerPt.y) = 255;
+	//		g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
+	//		g_edge[2].at<float>(centerPt.x, centerPt.y) = 0;
+	//	}
+	//	else
+	//	{
+	//		g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+	//		g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
+	//		g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
+	//	}
+	//	
+	//}
+
+	//if (g_PNdifference.at<int>(centerPt.x, centerPt.y) == 1 && g_PPdifference.at<int>(centerPt.x, centerPt.y) == 1)
+	//{
+	//	g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+	//	g_edge[1].at<float>(centerPt.x, centerPt.y) = 0;
+	//	g_edge[2].at<float>(centerPt.x, centerPt.y) = 255;
+	//}
+	//if (g_PNumbOfS.at<int>(i, j) == 2 &&g_PNdifference.at<int>(centerPt.x, centerPt.y) == g_PPdifference.at<int>(centerPt.x, centerPt.y) && g_PPdifference.at<int>(centerPt.x, centerPt.y)>0 && g_PPdifference.at<int>(centerPt.x, centerPt.y)<5)
+	//{
+	//	g_edge[0].at<float>(centerPt.x, centerPt.y) = 0;
+	//	g_edge[1].at<float>(centerPt.x, centerPt.y) = 255;
+	//	g_edge[2].at<float>(centerPt.x, centerPt.y) = 0;
+	//}
 }
 
 //Input:min_max为1表示找最大，为0表示找最小
@@ -1116,7 +1146,6 @@ void Edge::edgeDetection1()
 	++first2;
 	}
 	//*/
-
 	outXls("./output/imFlag.xls", g_imgFlg, "int");
 
 	//输出混合图像【边缘+原图】
@@ -1165,10 +1194,10 @@ void Edge::edgeDetection1()
 	//getTypeEdge(false);
 
 	//添加噪音
-	//if (noice)
+	//if (CONTRADICTION)
 	//{
 	//	salt(g_srcImage);
-	//	//imwrite("./output/noice.bmp", g_srcImage);
+	//	//imwrite("./output/CONTRADICTION.bmp", g_srcImage);
 	//}
 
 	//以后的循环初始化
@@ -1204,11 +1233,720 @@ void Edge::edgeDetection2()
 	getTypeEdge();
 }
 void Edge::edgeDetection3(){
-	//1 find a start edge that include three same pointypes
+	Point2i A, AC, B, BC;
+	Point2i pt;
+	int indext;
 
-	//2 stretch the start edge from two direction
+	//1 找到过渡边点，
+	for (int i = 1; i < gray.rows - 1; i++)
+	{
+		for (int j = 1; j < gray.cols - 1; j++)
+		{
+			//int flagA = false, flagB = false;
+			pt.x = i;
+			pt.y = j;
+			////中心点类型
+			//int cv = g_imgFlg2.at<int>(pt.x, pt.y);
+			//int tmpFlag, tmpFlagNext;
+			//int index;
+			////2 找到两个方向上的AB,CD
+			////灰度图像
+			////如果第一个点和中心点相同，则找一个和中点不相同的点
+			//if (cv == 11 && g_imgFlg.at<int>(i, j) == 0 && startPoint(i, j))
+			//{
+			//	//find 11 in anticlockwise
+			//	for (index = 0; index < 8; ++index)
+			//	{
+			//		tmpFlag = g_imgFlg2.at<int>(i + a8i[index], j + a8j[index]);
+			//		tmpFlagNext = g_imgFlg2.at<int>(i + a8i[index + 1], j + a8j[index + 1]);
+			//		if (tmpFlag == 11)
+			//		{
+			//			//11,12.others
+			//			if (tmpFlagNext == 12)
+			//			{
+			//				A.x = i + a8i[index];
+			//				A.y = j + a8j[index];
+			//				AC.x = i + a8i[index + 1];
+			//				AC.y = j + a8j[index + 1];
+
+			//				flagA = true;
+			//				break;
+
+			//			}
+			//			else if (tmpFlagNext != 11)
+			//			{
+			//				++index;
+			//			}
+			//		}
+			//	}
+			//	//find 11 in clockwise
+			//	if (flagA)
+			//	{
+			//		for (index = 8; index > 0; --index)
+			//		{
+			//			tmpFlag = g_imgFlg2.at<int>(i + a8i[index], j + a8j[index]);
+			//			tmpFlagNext = g_imgFlg2.at<int>(i + a8i[index - 1], j + a8j[index - 1]);
+			//			if (tmpFlag == 11)
+			//			{
+			//				//11,12.others
+			//				if (tmpFlagNext == 12)
+			//				{
+			//					B.x = i + a8i[index];
+			//					B.y = j + a8j[index];
+			//					BC.x = i + a8i[index - 1];
+			//					BC.y = j + a8j[index - 1];
+
+			//					if (A == B || AC == BC)
+			//					{
+			//						break;
+			//					}
+
+			//					flagB = true;
+			//					break;
+
+			//				}
+			//				else if (tmpFlagNext != 11)
+			//				{
+			//					--index;
+			//				}
+			//			}
+			//		}
+			//	}
+
+			//}
+			//else if (cv == 12 && g_imgFlg.at<int>(i, j) == 0 && startPoint(i, j))
+			//{
+			//	//find 11 in anticlockwise
+			//	for (index = 0; index < 8; ++index)
+			//	{
+			//		tmpFlag = g_imgFlg2.at<int>(i + a8i[index], j + a8j[index]);
+			//		tmpFlagNext = g_imgFlg2.at<int>(i + a8i[index + 1], j + a8j[index + 1]);
+			//		if (tmpFlag == 12)
+			//		{
+			//			//11,12.others
+			//			if (tmpFlagNext == 11)
+			//			{
+			//				A.x = i + a8i[index];
+			//				A.y = j + a8j[index];
+			//				AC.x = i + a8i[index + 1];
+			//				AC.y = j + a8j[index + 1];
+
+			//				flagA = true;
+			//				break;
+
+			//			}
+			//			else if (tmpFlagNext != 12)
+			//			{
+			//				++index;
+			//			}
+			//		}
+			//	}
+			//	//find 11 in clockwise
+			//	if (flagA)
+			//	{
+			//		for (index = 8; index > 0; --index)
+			//		{
+			//			tmpFlag = g_imgFlg2.at<int>(i + a8i[index], j + a8j[index]);
+			//			tmpFlagNext = g_imgFlg2.at<int>(i + a8i[index - 1], j + a8j[index - 1]);
+			//			if (tmpFlag == 12)
+			//			{
+			//				//11,12.others
+			//				if (tmpFlagNext == 11)
+			//				{
+			//					B.x = i + a8i[index];
+			//					B.y = j + a8j[index];
+			//					BC.x = i + a8i[index - 1];
+			//					BC.y = j + a8j[index - 1];
+
+			//					if (A == B || AC == BC)
+			//					{
+			//						break;
+			//					}
+
+			//					flagB = true;
+			//					break;
+
+			//				}
+			//				else if (tmpFlagNext != 12)
+			//				{
+			//					--index;
+			//				}
+			//			}
+			//		}
+			//	}
+
+			//}
+
+
+			//if (flagB&&flagA)
+			//{
+			//	//g_edge[0].at<float>(pt.x, pt.y) = 0;
+			//	//g_edge[1].at<float>(pt.x, pt.y) = 255;
+			//	//g_edge[2].at<float>(pt.x, pt.y) = 0;
+
+			//	//g_imgFlg.at<int>(pt.x, pt.y) = 1;//起点
+
+			//	//进行延伸操作
+			//	calTime = 0;
+			//	//traceEdge(A, AC);
+			//	calTime = 0;
+			//	//traceEdge(B, BC);
+
+
+
+			//}
+
+			//tag small edge
+			int flag;
+			Point2i pt;
+
+			flag = imgFlg3.at<int>(i, j);
+			pt.x = i;
+			pt.y = j;
+
+			switch (flag)
+			{
+			case IDEABIG://理想大边
+				setColor(pt, 0, 0, 255);//red
+				break;
+			case IDEASMALL://理想小边
+				setColor(pt, 0, 255, 255);//yellow
+				break;
+			case BUFFERBIG://过渡大边
+				setColor(pt, 255, 0, 0);//blue
+				break;
+			case BUFFERSMALL://过渡小边
+				setColor(pt, 0, 255, 0);//green
+				break;
+			case NOTBIG://大非
+				setColor(pt, 255, 0, 255);//magenta
+				break;
+			case NOTSMALL://小非
+				setColor(pt, 0, 125, 125);//half yellow
+				break;
+			case CONTRADICTION://矛盾点
+				setColor(pt, 255, 255, 0);//cyan
+				break;
+			case INNER://内部点
+				//setColor(pt, 0, 0,0);//原图颜色
+				break;
+				//default:
+				//cout << "flag error!\n";
+			}
+
+		}//end j
+
+	}//end i
+
+
+
+	//for (int i = 1; i < gray.rows - 1; i++)
+	//{
+	//	for (int j = 1; j < gray.cols - 1; j++)
+	//	{
+	//		int flag = g_imgFlg.at<int>(i, j);
+	//		//find endpoint pt
+	//		if (flag == 1)
+	//		{
+	//			pt.x = i;
+	//			pt.y = j;
+	//			//度为1的点的前一个点
+	//			Point2i prePt = getDegree1PrePoint(pt);
+	//			
+
+	//			if (prePt.x != 0)
+	//			{
+
+	//				//得到所有端点
+	//				g_edge[0].at<float>(pt.x, pt.y) = 0;
+	//				g_edge[1].at<float>(pt.x, pt.y) = 255;
+	//				g_edge[2].at<float>(pt.x, pt.y) = 255;
+
+	//				stretchTime = 0;
+	//				stretchEndPoint(prePt, pt);
+	//			}
+	//		}
+
+	//	}
+	//}
+
+	//输出混合图像【边缘+原图】
+	getMix();
+
+	//得到混合的彩色边缘点云图
+	g_edge[0].convertTo(g_edge[0], CV_8UC1);
+	g_edge[1].convertTo(g_edge[1], CV_8UC1);
+	g_edge[2].convertTo(g_edge[2], CV_8UC1);
+	merge(g_edge, g_mergImg);
+
+	imshow("g_mergImg", g_mergImg);
+
+
+	imwrite("./output/median.bmp", g_mergImg);
+	merge(g_srcImageChannels, g_srcImageBGR);
+	imwrite("./output/tagEdge.bmp", g_srcImageBGR);
+
+	//将得到的彩色边缘图二值化
+	Mat bimap;
+	cvtColor(g_mergImg, bimap, CV_BGR2GRAY);
+	threshold(bimap, bimap, 2, 255, THRESH_BINARY);
+
+	string str, str1;
+	//char buffer[10];
+	//_itoa(nTH, buffer, 10);
+	LPCWSTR svDir;
+	//mkdir
+
+	//CreateDirectory(TEXT("aa\\bb"), NULL);
+	//CreateDirectory(svDir,NULL)
+
+	if (nTH < 10)
+	{
+		str = "output/tmp/" + num2str(0) + num2str(nTH) + ".png";
+		//str1 = "output/" + num2str(0) + num2str(nTH) + ".bmp";
+	}
+	else
+		str = "output/tmp/" + num2str(nTH) + ".png";
+
+	//imwrite(str1, g_mergImg);
+	imwrite(str, bimap);
+	//imshow("边缘图", bimap);
+
+	//得到不同星型的混合边缘图
+	//getTypeEdge(false);
+
+	//添加噪音
+	//if (CONTRADICTION)
+	//{
+	//	salt(g_srcImage);
+	//	//imwrite("./output/CONTRADICTION.bmp", g_srcImage);
+	//}
+
+	//以后的循环初始化
+	//nextInitial();
 }
 
+void setColor(Point2i pt, int B, int G, int R)
+{
+	g_edge[0].at<float>(pt.x, pt.y) = B;
+	g_edge[1].at<float>(pt.x, pt.y) = G;
+	g_edge[2].at<float>(pt.x, pt.y) = R;
+}
+//get endpoint's prePoint
+Point2i  getDegree1PrePoint(Point2i pt){
+	Point2i temPt = 0;
+	int num = 0;
+	vector<Point2i> sameFlagPoint;
+	for (int i = 0; i < 8; ++i)
+	{
+		int x = pt.x + a8i[i];
+		int y = pt.y + a8j[i];
+		if (g_imgFlg.at<int>(x, y) == 1 || g_imgFlg.at<int>(x, y) == 23)
+		{
+			++num;
+			temPt.x = x;
+			temPt.y = y;
+			sameFlagPoint.push_back(temPt);
+		}
+	}
+	if (num == 1)
+	{
+		return sameFlagPoint.at(0);
+	}
+	else if (num == 2)//处理直角转弯的情况 端点确定
+	{
+		Point2i p1, p2;
+		p1 = sameFlagPoint.at(0);
+		p2 = sameFlagPoint.at(1);
+
+		if ((abs(p1.x - p2.x) + abs(p1.y - p2.y)) == 1)
+		{
+			if (p1.x == pt.x || p1.y == pt.y)
+			{
+				return p1;
+			}
+			else
+				return p2;
+		}
+		else
+			return 0;
+
+	}
+	else
+		return 0;
+
+}
+//延伸边缘
+/*
+4个颜色的标记在imgflag2中，单边缘图标记在imgflag中
+*/
+bool stretchEndPoint(Point2i pt_pre, Point2i pt)
+{
+	int prePt = getIangle(pt, pt_pre);
+	int ptFlag = g_imgFlg2.at<int>(pt.x, pt.y);
+	Point2i tempPt;
+	bool findNext = false;
+	bool findSame = false;
+	bool findDiff = true;
+	//tage point besidew pt_pre
+	int x0 = pt.x + a8i[(prePt + 1) % 8];
+	int y0 = pt.y + a8j[(prePt + 1) % 8];
+	int x1 = pt.x + a8i[(prePt - 1 + 8) % 8];
+	int y1 = pt.y + a8j[(prePt - 1 + 8) % 8];
+	if (g_imgFlg.at<int>(x0, y0) == 0)
+	{
+		g_imgFlg.at<int>(x0, y0) = 21;
+	}
+	if (g_imgFlg.at<int>(x1, y1) == 0)
+	{
+		g_imgFlg.at<int>(x1, y1) = 22;
+	}
+	g_imgFlg.at<int>(pt_pre.x, pt_pre.y) = 23;
+	g_imgFlg.at<int>(pt.x, pt.y) = 23;
+
+	//查找相同标记的点
+	for (int i = 0; i < 8; ++i)
+	{
+		tempPt.x = pt.x + a8i[i];
+		tempPt.y = pt.y + a8j[i];
+
+		bool colision = isColision(tempPt);
+		int imgFlag2 = g_imgFlg2.at<int>(tempPt.x, tempPt.y);
+		int imgFlag = g_imgFlg.at<int>(tempPt.x, tempPt.y);
+
+		if (imgFlag2 == ptFlag&&imgFlag == 0)//!colision&&
+		{
+
+			g_imgFlg.at<int>(tempPt.x, tempPt.y) = 1;
+			g_edge[0].at<float>(tempPt.x, tempPt.y) = 255;
+			g_edge[1].at<float>(tempPt.x, tempPt.y) = 255;
+			g_edge[2].at<float>(tempPt.x, tempPt.y) = 0;
+			if (colision)
+			{
+				break;
+			}
+			findSame = true;
+			findNext = true;
+			break;
+		}
+
+
+
+
+	}
+	//如果没找到相同标记的点，则2找12，12找2
+	if (!findSame)
+	{
+		for (int i = 0; i < 8; ++i)
+		{
+			tempPt.x = pt.x + a8i[i];
+			tempPt.y = pt.y + a8j[i];
+
+			bool colision = isColision(tempPt);
+			int imgFlag2 = g_imgFlg2.at<int>(tempPt.x, tempPt.y);
+			int imgFlag = g_imgFlg.at<int>(tempPt.x, tempPt.y);
+			if (ptFlag == 2)
+			{
+				if (imgFlag2 == 12 && imgFlag == 0)//!colision&&
+				{
+
+					g_imgFlg.at<int>(tempPt.x, tempPt.y) = 1;
+					g_edge[0].at<float>(tempPt.x, tempPt.y) = 255;
+					g_edge[1].at<float>(tempPt.x, tempPt.y) = 255;
+					g_edge[2].at<float>(tempPt.x, tempPt.y) = 0;
+					if (colision)
+					{
+						break;
+					}
+					findDiff = false;
+					findNext = true;
+					break;
+				}
+
+			}
+
+			if (ptFlag == 12)
+			{
+				if (imgFlag2 == 2 && imgFlag == 0)//!colision&&
+				{
+
+					g_imgFlg.at<int>(tempPt.x, tempPt.y) = 1;
+					g_edge[0].at<float>(tempPt.x, tempPt.y) = 255;
+					g_edge[1].at<float>(tempPt.x, tempPt.y) = 255;
+					g_edge[2].at<float>(tempPt.x, tempPt.y) = 0;
+					if (colision)
+					{
+						break;
+					}
+					findDiff = false;
+					findNext = true;
+					break;
+				}
+			}
+		}
+
+		//if (findDiff)
+		//{
+		//	for (int i = 0; i < 8; ++i)
+		//	{
+		//		tempPt.x = pt.x + a8i[i];
+		//		tempPt.y = pt.y + a8j[i];
+
+		//		bool colision = isColision(tempPt);
+		//		int imgFlag2 = g_imgFlg2.at<int>(tempPt.x, tempPt.y);
+		//		int imgFlag = g_imgFlg.at<int>(tempPt.x, tempPt.y);
+		//		if (imgFlag2 >0 && imgFlag == 0)//!colision&&
+		//		{
+		//			g_imgFlg.at<int>(tempPt.x, tempPt.y) = 1;
+		//			g_edge[0].at<float>(tempPt.x, tempPt.y) = 0;
+		//			g_edge[1].at<float>(tempPt.x, tempPt.y) = 255;
+		//			g_edge[2].at<float>(tempPt.x, tempPt.y) = 0;
+		//			findNext = true;
+		//			break;
+		//		}
+		//	}
+		//}
+
+	}
+	if (findNext)
+	{
+		stretchEndPoint(pt, tempPt);
+	}
+
+	return true;
+}
+//判断pt的8邻域是否有边缘点，即延伸过程中是否碰撞到了已有边
+bool isColision(Point2i pt)
+{
+	for (int i = 0; i < 8; ++i)
+	{
+		if (!outOfrange(pt.x + a8i[i], pt.y + a8j[i]) && g_imgFlg.at<int>(pt.x + a8i[i], pt.y + a8j[i]) == 1)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+bool traceEdge(Point2i A1, Point2i A2)
+{
+	//cout << "..." << endl;
+	++calTime;
+	if (calTime > 100)
+	{
+		//return false;
+	}
+	Point2i E;//next edge point 
+	int sumA1 = getSameFlagNumInFlag2(A1, 1);
+	int sumA2 = getSameFlagNumInFlag2(A2, 1);
+	if (sumA1 > sumA2)
+	{
+		E = A1;
+	}
+	else
+	{
+		E = A2;
+	}
+	//set color to E
+	g_edge[0].at<float>(E.x, E.y) = 0;
+	g_edge[1].at<float>(E.x, E.y) = 0;
+	g_edge[2].at<float>(E.x, E.y) = 255;
+	g_imgFlg.at<int>(E.x, E.y) = 1;
+
+	//find next A,AC
+	int flagA = false, flagB = false;
+	int i, j;
+	i = E.x;
+	j = E.y;
+	Point2i A, AC, B, BC;
+	//中心点类型
+	int cv = g_imgFlg2.at<int>(E.x, E.y);
+	int tmpFlag, tmpFlagNext;
+	int index;
+	//2 找到两个方向上的AB,CD
+	//灰度图像
+	//如果第一个点和中心点相同，则找一个和中点不相同的点
+	if (cv == 11)
+	{
+		//find 11 in anticlockwise
+		for (index = 0; index < 8; ++index)
+		{
+			tmpFlag = g_imgFlg2.at<int>(i + a8i[index], j + a8j[index]);
+			tmpFlagNext = g_imgFlg2.at<int>(i + a8i[index + 1], j + a8j[index + 1]);
+			if (tmpFlag == 11)
+			{
+				//11,12.others
+				if (tmpFlagNext == 12)
+				{
+
+					A.x = i + a8i[index];
+					A.y = j + a8j[index];
+					AC.x = i + a8i[index + 1];
+					AC.y = j + a8j[index + 1];
+
+					flagA = true;
+					break;
+
+				}
+				/*	else if (tmpFlagNext != 11)
+					{
+					++index;
+					}*/
+			}
+		}
+		//find 11 in clockwise
+
+		for (index = 8; index > 0; --index)
+		{
+			tmpFlag = g_imgFlg2.at<int>(i + a8i[index], j + a8j[index]);
+			tmpFlagNext = g_imgFlg2.at<int>(i + a8i[index - 1], j + a8j[index - 1]);
+			if (tmpFlag == 11)
+			{
+				//11,12.others
+				if (tmpFlagNext == 12)
+				{
+					B.x = i + a8i[index];
+					B.y = j + a8j[index];
+					BC.x = i + a8i[index - 1];
+					BC.y = j + a8j[index - 1];
+
+					if (A == B || AC == BC)
+					{
+						break;
+					}
+
+					flagB = true;
+					break;
+
+				}
+				/*	else if (tmpFlagNext != 11)
+					{
+					--index;
+					}*/
+			}
+		}
+
+
+	}
+	else if (cv == 12)
+	{
+		//find 12 in anticlockwise
+		for (index = 0; index < 8; ++index)
+		{
+			tmpFlag = g_imgFlg2.at<int>(i + a8i[index], j + a8j[index]);
+			tmpFlagNext = g_imgFlg2.at<int>(i + a8i[index + 1], j + a8j[index + 1]);
+			if (tmpFlag == 12)
+			{
+				//11,12.others
+				if (tmpFlagNext == 11)
+				{
+
+					A.x = i + a8i[index];
+					A.y = j + a8j[index];
+					AC.x = i + a8i[index + 1];
+					AC.y = j + a8j[index + 1];
+
+					flagA = true;
+					break;
+
+				}
+				/*else if (tmpFlagNext != 12)
+				{
+				++index;
+				}*/
+			}
+		}
+		//find 11 in clockwise	
+		for (index = 8; index > 0; --index)
+		{
+			tmpFlag = g_imgFlg2.at<int>(i + a8i[index], j + a8j[index]);
+			tmpFlagNext = g_imgFlg2.at<int>(i + a8i[index - 1], j + a8j[index - 1]);
+			if (tmpFlag == 12)
+			{
+				//11,12.others
+				if (tmpFlagNext == 11)
+				{
+					B.x = i + a8i[index];
+					B.y = j + a8j[index];
+					BC.x = i + a8i[index - 1];
+					BC.y = j + a8j[index - 1];
+
+					if (A == B || AC == BC)
+					{
+						break;
+					}
+
+					flagB = true;
+					break;
+
+				}
+				/*	else if (tmpFlagNext != 12)
+					{
+					--index;
+					if (index==0)
+					{
+					cout << "index" << index << endl;
+					}
+					}*/
+			}
+		}
+
+	}
+	//bool trace = true;
+	//while (trace)
+	//{
+	//	trace = traceEdge(A, AC);
+	//}
+	//trace = true;
+	//while (trace)
+	//{
+	//	trace = traceEdge(B, BC);
+	//}
+
+	if (flagA)
+	{
+		if (g_imgFlg.at<int>(A.x, A.y) == 0 && g_imgFlg.at<int>(AC.x, AC.y) == 0)
+		{
+
+			traceEdge(A, AC);
+		}
+		else
+			return false;
+	}
+	if (flagB)
+	{
+		if (g_imgFlg.at<int>(B.x, B.y) == 0 && g_imgFlg.at<int>(BC.x, BC.y) == 0)
+		{
+			//A1 = B;
+			//A2 = BC;
+			traceEdge(B, BC);
+		}
+		else
+			return false;
+	}
+
+	return true;
+}
+
+int getSameFlagNumInFlag2(Point2i pt, int flag)
+{
+	int x1;
+	int result = 0;
+	for (int i = 0; i < 8; ++i)
+	{
+		x1 = g_imgFlg2.at<int>(pt.x + a8i[i], pt.y + a8j[i]);
+		if (x1 == flag)
+		{
+			++result;
+		}
+	}
+	return result;
+}
+void displayMixAttribute(Point2i pt, int th, int sortType, int buffer, int sameType, int numPP, int numPN, int numPS, bool big_small)
+{
+	g_edge[0].at<float>(pt.x, pt.y) = 255;
+	g_edge[1].at<float>(pt.x, pt.y) = 0;
+	g_edge[2].at<float>(pt.x, pt.y) = 255;
+}
 
 template <class T>
 string num2str(T num)
@@ -1428,6 +2166,8 @@ void Edge::Init()
 	g_srcImageBGR = Mat::zeros(gray.rows, gray.cols, CV_8UC3);
 
 	g_imgFlg = Mat::zeros(gray.rows, gray.cols, CV_32S);
+	g_imgFlg2 = Mat::zeros(gray.rows, gray.cols, CV_32S);
+	imgFlg3 = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_nTypeFlag = Mat::zeros(gray.rows, gray.cols, CV_32S);
 	g_nSectionFlg = Mat::zeros(gray.rows, gray.cols, CV_32S);
 
@@ -1521,7 +2261,8 @@ void Edge::Init()
 			}
 			centerPoint.x = i;
 			centerPoint.y = j;
-			calcPixelAttribute(centerPoint);
+			calcPixelAttribute_new(centerPoint);
+			//calcPixelAttribute(centerPoint);
 			calcStartPixelType(centerPoint);
 		}
 	}
@@ -1621,7 +2362,6 @@ void calcPixelAttribute(Point2i pt){
 	else
 	{
 		ptValue = g_calImg.at<float>(i, j);
-		//point_9[8] is centerpoint
 		point_9[8] = g_calImg.at<float>(i, j);
 	}
 
@@ -1656,7 +2396,7 @@ void calcPixelAttribute(Point2i pt){
 		{
 			++numPP;
 		}
-		if (point_9_difference[k] <= -TH1)
+		if (point_9_difference[k] < -TH1)
 		{
 			++numPN;
 		}
@@ -1749,13 +2489,14 @@ void calcPixelAttribute(Point2i pt){
 	}
 
 	//whether Buffer or not
-	if (maxNum > 1)
-	{
-		buffer = 1;//---------------------------------3 buffer
-	}
+	//if (maxNum > 1)
+	//{
+	//	buffer = maxNum;//---------------------------------3 buffer
+	//}
+	buffer = maxNum;
+
 
 	//assign
-
 	g_PTh.at<int>(i, j) = th;
 	g_PType.at<int>(i, j) = type;
 	g_PBuffer.at<int>(i, j) = buffer;
@@ -1763,6 +2504,547 @@ void calcPixelAttribute(Point2i pt){
 	g_PPdifference.at<int>(i, j) = numPP;
 	g_PNdifference.at<int>(i, j) = numPN;
 	g_PNumbOfS.at<int>(i, j) = numPS;
+
+	//1 buffer area numPS==2
+	if (0)//type > 2 && type < 8
+	{
+		if (!SORT)
+		{
+			if (buffer == 1)//理想边缘点
+			{
+				if (big_small)//小边
+				{
+					if (FOURCOLOR)
+					{
+						g_edge[0].at<float>(pt.x, pt.y) = 0;
+						g_edge[1].at<float>(pt.x, pt.y) = 255;
+						g_edge[2].at<float>(pt.x, pt.y) = 255;
+					}
+					/**/
+					g_imgFlg2.at<int>(pt.x, pt.y) = 1;
+				}
+				else//大边
+				{
+					if (FOURCOLOR)
+					{
+						g_edge[0].at<float>(pt.x, pt.y) = 0;
+						g_edge[1].at<float>(pt.x, pt.y) = 0;
+						g_edge[2].at<float>(pt.x, pt.y) = 255;
+					}
+					/**/
+					g_imgFlg2.at<int>(pt.x, pt.y) = 2;
+				}
+			}
+			if (buffer > 1)//过渡边缘点
+			{
+				if (big_small)//小边
+				{
+					if (FOURCOLOR)
+					{
+						g_edge[0].at<float>(pt.x, pt.y) = 0;
+						g_edge[1].at<float>(pt.x, pt.y) = 255;
+						g_edge[2].at<float>(pt.x, pt.y) = 0;
+					}
+					/**/
+					g_imgFlg2.at<int>(pt.x, pt.y) = 11;
+				}
+				else//大边
+				{
+					if (FOURCOLOR)
+					{
+						g_edge[0].at<float>(pt.x, pt.y) = 255;
+						g_edge[1].at<float>(pt.x, pt.y) = 0;
+						g_edge[2].at<float>(pt.x, pt.y) = 0;
+					}
+					/**/
+					g_imgFlg2.at<int>(pt.x, pt.y) = 12;
+				}
+			}
+		}
+		else
+		{
+			//
+		}
+
+	}
+
+	//if (type > 2 && type < 8)//
+	//{
+	//	int num;
+	//	num = numPP + numPN;
+	//	if (num==2)//理想边缘点
+	//	{
+	//		if (big_small)//小边
+	//		{
+	//			g_edge[0].at<float>(pt.x, pt.y) = 0;
+	//			g_edge[1].at<float>(pt.x, pt.y) = 0;
+	//			g_edge[2].at<float>(pt.x, pt.y) = 125;
+	//		}
+	//		else//大边
+	//		{
+	//			g_edge[0].at<float>(pt.x, pt.y) = 0;
+	//			g_edge[1].at<float>(pt.x, pt.y) = 0;
+	//			g_edge[2].at<float>(pt.x, pt.y) = 255;
+	//		}
+	//	}
+	//	if (0)//过渡边缘点
+	//	{
+	//		if (big_small)//小边
+	//		{
+	//			g_edge[0].at<float>(pt.x, pt.y) = 125;
+	//			g_edge[1].at<float>(pt.x, pt.y) = 0;
+	//			g_edge[2].at<float>(pt.x, pt.y) = 0;
+	//		}
+	//		else//大边
+	//		{
+	//			g_edge[0].at<float>(pt.x, pt.y) = 255;
+	//			g_edge[1].at<float>(pt.x, pt.y) = 0;
+	//			g_edge[2].at<float>(pt.x, pt.y) = 0;
+	//		}
+	//	}
+	//}
+
+
+	//2 背景区域，用黄色表示；
+	if (buffer == 0)//&&numPS>2&&numPS<8&&numPP==1&&numPN==1
+	{
+		/*g_edge[0].at<float>(pt.x, pt.y) = 0;
+		g_edge[1].at<float>(pt.x, pt.y) = 255;
+		g_edge[2].at<float>(pt.x, pt.y) = 255;*/
+	}
+	if (numPP == 4 && numPN == 4)
+	{
+		g_edge[0].at<float>(pt.x, pt.y) = 0;
+		g_edge[1].at<float>(pt.x, pt.y) = 0;
+		g_edge[2].at<float>(pt.x, pt.y) = 255;
+	}
+	if (numPP == 3 && numPN == 3)
+	{
+		g_edge[0].at<float>(pt.x, pt.y) = 0;
+		g_edge[1].at<float>(pt.x, pt.y) = 255;
+		g_edge[2].at<float>(pt.x, pt.y) = 0;
+	}
+	if (numPP == 2 && numPN == 2)
+	{
+		g_edge[0].at<float>(pt.x, pt.y) = 255;
+		g_edge[1].at<float>(pt.x, pt.y) = 0;
+		g_edge[2].at<float>(pt.x, pt.y) = 0;
+	}
+	if (numPP == 1 && numPN == 1)
+	{
+		g_edge[0].at<float>(pt.x, pt.y) = 0;
+		g_edge[1].at<float>(pt.x, pt.y) = 255;
+		g_edge[2].at<float>(pt.x, pt.y) = 255;
+	}
+
+	//displayMixAttribute(pt,th,type, buffer, numPS, numPP, numPN, numPS, big_small);
+
+}
+void calcPixelAttribute_new(const Point2i pt){
+
+	//point's Attribute
+	int th_low, th_high;
+	int th;
+	int type;
+	int buffer;
+	int big_small;
+	Point2i temPt;
+	vector<Point2i> neighbour;
+	int x, y;
+	int diff[8] = { 0 };
+	int max_positive = 0;
+	int min_negative = -1;
+	Point2i max_positive_position, min_negative_position;
+	vector<Point2i> area_A, area_B;
+	bool findBig = false, findSmall = false;
+	for (int i = 0; i < 8; ++i)
+	{
+		diff[i] = g_calImg.at<float>(pt.x + a8i[i + 1], pt.y + a8j[i + 1]) - g_calImg.at<float>(pt.x + a8i[i], pt.y + a8j[i]);
+		if (diff[i] >= 0)
+		{
+			if (diff[i] >= max_positive)
+			{
+				max_positive = diff[i];
+				max_positive_position.x = pt.x + a8i[i];
+				max_positive_position.y = pt.y + a8j[i];
+				findBig = true;
+			}
+		}
+		else
+		{
+			if (diff[i] <= min_negative)
+			{
+				min_negative = diff[i];
+				min_negative_position.x = pt.x + a8i[i];
+				min_negative_position.y = pt.y + a8j[i];
+				findSmall = true;
+			}
+		}
+	}
+	if (findBig&&findSmall)
+	{
+		th = min(abs(min_negative), abs(max_positive));
+
+		//get two area:big area A,small area B;
+		int big_area_direction, small_area_direction;
+		Point2i temPt;
+		big_area_direction = getIangle(pt, max_positive_position);
+		small_area_direction = getIangle(pt, min_negative_position);
+
+		//big area A
+		int indexA1 = (big_area_direction + 1) % 8;//bigbehind-small
+		int indexA2 = small_area_direction;
+		while (indexA1 != indexA2)
+		{
+
+			temPt.x = pt.x + a8i[indexA1];
+			temPt.y = pt.y + a8j[indexA1];
+			area_A.push_back(temPt);
+			++indexA1;
+			if (indexA1 == 8)
+			{
+				indexA1 = 0;
+			}
+		}
+		area_A.push_back(min_negative_position);
+		int lenA = area_A.size();
+
+		//small area B
+		int indexB1 = (small_area_direction + 1) % 8;
+		int indexB2 = big_area_direction;
+		while (indexB1 != indexB2)
+		{
+
+			temPt.x = pt.x + a8i[indexB1];
+			temPt.y = pt.y + a8j[indexB1];
+			area_B.push_back(temPt);
+			++indexB1;
+			if (indexB1 == 8)
+			{
+				indexB1 = 0;
+			}
+		}
+		area_B.push_back(max_positive_position);
+		int lenB = area_B.size();
+
+		//get samll value in  A:small_A;get big value in B:big_B;
+		vector<int> diffA, diffB;
+		int big_diffA = 0, big_diffB = 0, big_diffAB;
+		int tmpDiff;
+		int small_A, big_B;
+		small_A = g_calImg.at<float>(area_A.at(0).x, area_A.at(0).y);
+		big_B = g_calImg.at<float>(area_B.at(0).x, area_B.at(0).y);
+		//if (lenA==1)
+		//{
+		//	big_diffA = 0;
+		//}
+		//if (lenB==1)
+		//{
+		//	big_diffB = 0;
+		//}
+		for (int i = 1; i < lenA; ++i)
+		{
+			if (g_calImg.at<float>(area_A.at(i).x, area_A.at(i).y)<small_A)
+			{
+				small_A = g_calImg.at<float>(area_A.at(i).x, area_A.at(i).y);
+			}
+			tmpDiff = abs(g_calImg.at<float>(area_A.at(i).x, area_A.at(i).y) - g_calImg.at<float>(area_A.at(i - 1).x, area_A.at(i - 1).y));
+			if (tmpDiff>big_diffA)
+			{
+				big_diffA = tmpDiff;
+			}
+		}
+		for (int i = 1; i<lenB; ++i)
+		{
+			if (g_calImg.at<float>(area_B.at(i).x, area_B.at(i).y)>big_B)
+			{
+				big_B = g_calImg.at<float>(area_B.at(i).x, area_B.at(i).y);
+			}
+			tmpDiff = abs(g_calImg.at<float>(area_B.at(i).x, area_B.at(i).y) - g_calImg.at<float>(area_B.at(i - 1).x, area_B.at(i - 1).y));
+			if (tmpDiff > big_diffB)
+			{
+				big_diffB = tmpDiff;
+			}
+		}
+		//area_A.clear(); area_B.clear();
+		//get big_diffA and big_diffB;
+		big_diffAB = max(big_diffA, big_diffB);
+		th_high = th;
+		th_low = big_diffAB + 1;
+
+
+		//whether centerPoint belongs to A or B
+		int centValue = g_calImg.at<float>(pt.x, pt.y);
+		if (centValue > small_A)
+		{
+			//centValue belongs big part A
+			big_small = 2;
+			type = lenA;
+		}
+		else if (centValue < big_B)
+		{
+			//belong to small Part B
+			big_small = 1;
+			type = lenB;
+		}
+		else
+		{
+			int distanceA, distanceB;
+			distanceA = abs(centValue - small_A);
+			distanceB = abs(centValue - big_B);
+			if (distanceA > distanceB)
+			{
+				//belong to small Part B
+				big_small = 1;
+				type = lenB;
+			}
+			else
+			{
+				//centValue belongs big part A
+				big_small = 2;
+				type = lenA;
+			}
+		}
+
+		//whether centpoint is buffer area
+		int diff_smallA_big_B;
+		diff_smallA_big_B = abs(small_A - big_B);
+		if (big_diffA > diff_smallA_big_B || big_diffB > diff_smallA_big_B)
+		{
+			//belong to buffer area
+			buffer = 2;
+		}
+		else
+			buffer = 1;
+	}
+	else//pure inner points
+	{
+		th_low = 0;
+		th_high = 0;
+		type = 8;
+		big_small = -1;
+		buffer = -1;
+		g_imgFlg2.at<int>(pt.x, pt.y) = INNER;
+	}
+
+
+	//assign
+	g_PTh.at<int>(pt.x, pt.y) = th_low;
+	g_PType.at<int>(pt.x, pt.y) = type;
+	g_PBuffer.at<int>(pt.x, pt.y) = buffer;
+	g_PBigSmall.at<int>(pt.x, pt.y) = big_small;
+	int tmpFlag;
+	tmpFlag = imgFlg3.at<int>(pt.x, pt.y);
+	if (type > 2 && type < 8 && th_high>10)// && th >= TH1 &&th_low>10 
+	{
+		if (th_low <= th_high)
+		{
+			if (buffer == 1)//理想边缘点
+			{
+				if (big_small == 1)//小边
+				{
+					/*if (FOURCOLOR)
+					{
+					g_edge[0].at<float>(pt.x, pt.y) = 0;
+					g_edge[1].at<float>(pt.x, pt.y) = 255;
+					g_edge[2].at<float>(pt.x, pt.y) = 255;
+					}*/
+					/**/
+					if (tmpFlag == NOTBIG)
+					{
+						imgFlg3.at<int>(pt.x, pt.y) = CONTRADICTION;
+					}
+					else
+					{
+
+						imgFlg3.at<int>(pt.x, pt.y) = IDEASMALL;
+						setPointFlag(pt, area_A, area_B, IDEASMALL);
+					}
+
+				}
+				else if (big_small == 2)//大边
+				{
+					/*	if (FOURCOLOR)
+						{
+						g_edge[0].at<float>(pt.x, pt.y) = 0;
+						g_edge[1].at<float>(pt.x, pt.y) = 0;
+						g_edge[2].at<float>(pt.x, pt.y) = 255;
+						}*/
+					/**/
+					if (tmpFlag == NOTSMALL)
+					{
+						imgFlg3.at<int>(pt.x, pt.y) = CONTRADICTION;
+					}
+					else
+					{
+						imgFlg3.at<int>(pt.x, pt.y) = IDEABIG;
+						setPointFlag(pt, area_A, area_B, IDEABIG);
+					}
+
+				}
+			}
+			if (buffer == 2)//过渡边缘点
+			{
+				if (big_small == 1)//小边
+				{
+					/*if (FOURCOLOR)
+					{
+					g_edge[0].at<float>(pt.x, pt.y) = 0;
+					g_edge[1].at<float>(pt.x, pt.y) = 255;
+					g_edge[2].at<float>(pt.x, pt.y) = 0;
+					}*/
+					/**/
+					if (tmpFlag == NOTBIG)
+					{
+						imgFlg3.at<int>(pt.x, pt.y) = CONTRADICTION;
+
+					}
+					else
+					{
+						imgFlg3.at<int>(pt.x, pt.y) = BUFFERSMALL;
+						setPointFlag(pt, area_A, area_B, BUFFERSMALL);
+					}
+
+				}
+				else if (big_small == 2)//大边
+				{
+					/*if (FOURCOLOR)
+					{
+					g_edge[0].at<float>(pt.x, pt.y) = 255;
+					g_edge[1].at<float>(pt.x, pt.y) = 0;
+					g_edge[2].at<float>(pt.x, pt.y) = 0;
+					}*/
+					/**/
+					if (tmpFlag == NOTSMALL)
+					{
+						imgFlg3.at<int>(pt.x, pt.y) = CONTRADICTION;
+
+					}
+					else
+					{
+						imgFlg3.at<int>(pt.x, pt.y) = BUFFERBIG;
+						setPointFlag(pt, area_A, area_B, BUFFERBIG);
+					}
+
+				}
+			}
+		}
+		else
+		{
+			//CONTRADICTION
+			/*g_edge[0].at<float>(pt.x, pt.y) = 255;
+			g_edge[1].at<float>(pt.x, pt.y) = 255;
+			g_edge[2].at<float>(pt.x, pt.y) = 0;*/
+		}
+
+	}
+
+}
+
+void setPointFlag(Point2i pt, vector<Point2i> big_section, vector<Point2i> small_section, int Flag)
+{
+	int lenA = big_section.size();
+	int lenB = small_section.size();
+	int tmpFlag, x;
+	if (Flag == IDEABIG || Flag == BUFFERBIG)
+	{
+		//标记大非
+		for (int i = 0; i < lenA; ++i)
+		{
+			tmpFlag = imgFlg3.at<int>(big_section.at(i).x, big_section.at(i).y);
+			if (tmpFlag == BUFFERSMALL || tmpFlag == IDEASMALL)
+			{
+			}
+			else
+			{
+				if (tmpFlag == INNER)
+				{
+					imgFlg3.at<int>(big_section.at(i).x, big_section.at(i).y) = NOTBIG;
+				}
+				else if (tmpFlag == NOTSMALL)
+				{
+					imgFlg3.at<int>(big_section.at(i).x, big_section.at(i).y) = CONTRADICTION;
+				}
+
+			}
+
+
+		}
+		//标记小非
+		for (int j = 0; j < lenB; ++j)
+		{
+			tmpFlag = imgFlg3.at<int>(small_section.at(j).x, small_section.at(j).y);
+
+			if (tmpFlag == BUFFERBIG || tmpFlag == IDEABIG)
+			{
+
+			}
+			else
+			{
+				if (tmpFlag == INNER)
+				{
+					imgFlg3.at<int>(small_section.at(j).x, small_section.at(j).y) = NOTSMALL;
+				}
+				else if (tmpFlag == NOTBIG)
+				{
+					imgFlg3.at<int>(small_section.at(j).x, small_section.at(j).y) = CONTRADICTION;
+				}
+
+			}
+
+		}
+
+	}
+
+	if (Flag == IDEASMALL || Flag == BUFFERSMALL)
+	{
+		//标记大非
+		for (int i = 0; i < lenA; ++i)
+		{
+			tmpFlag = imgFlg3.at<int>(big_section.at(i).x, big_section.at(i).y);
+			if (tmpFlag == BUFFERBIG || tmpFlag == IDEABIG)
+			{
+
+			}
+			else
+			{
+				if (tmpFlag == INNER)
+				{
+					imgFlg3.at<int>(big_section.at(i).x, big_section.at(i).y) = NOTBIG;
+				}
+				else if (tmpFlag == NOTSMALL)
+				{
+					imgFlg3.at<int>(big_section.at(i).x, big_section.at(i).y) = CONTRADICTION;
+				}
+
+			}
+
+
+		}
+		//标记小非
+		for (int j = 0; j < lenB; ++j)
+		{
+			tmpFlag = imgFlg3.at<int>(small_section.at(j).x, small_section.at(j).y);
+			if (tmpFlag == BUFFERSMALL || tmpFlag == IDEASMALL)
+			{
+			}
+			else
+			{
+				if (tmpFlag == INNER)
+				{
+					imgFlg3.at<int>(small_section.at(j).x, small_section.at(j).y) = NOTSMALL;
+				}
+				else if (tmpFlag == NOTBIG)
+				{
+					imgFlg3.at<int>(small_section.at(j).x, small_section.at(j).y) = CONTRADICTION;
+				}
+
+			}
+
+
+		}
+	}
+
 }
 //Canny检测函数
 void Edge::on_Canny(int, void*)
@@ -2483,7 +3765,7 @@ void getTypeEdge()
 	//g_nType = Mat::zeros(gray.rows, gray.cols, CV_32S);//再次初始化
 }
 
-void deNoice(int row, int col)
+void deCONTRADICTION(int row, int col)
 {
 	int cenV, tmpV, num = 0, sum = 0;
 	float sv[8] = { 0 };
@@ -2594,7 +3876,7 @@ void salt(cv::Mat& image){
 
 	}
 	//imshow("dd", image);
-	imwrite("./output/noicePicture.bmp", image);
+	imwrite("./output/CONTRADICTIONPicture.bmp", image);
 }
 
 

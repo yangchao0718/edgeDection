@@ -35,7 +35,7 @@ Mat g_cannyDetectedEdges;
 int g_cannyLowThreshold = 10;//TrackBar位置参数  
 Mat gray;
 Mat g_listKS;//存放此方法边缘图
-Mat g_imgFlg;//图像标志位
+Mat g_imgFlg,g_imgFlg2,imgFlg3;//图像标志位
 Mat g_nSectionFlg;//区域划分处理标记
 Mat g_calImg;//转换了成了浮点数据类型的灰度值
 Mat g_calImg_I;
@@ -79,8 +79,8 @@ int a8j[] = { 1, 1, 0, -1, -1, -1, 0, 1, 1 };
 int a5[] = { 2, 1, 0, -1, -2 };
 Mat bigThanTh;
 int N1, N2;
-
-int TH1=10;
+int stretchTime;
+int TH1=20;
 int calTime;
 bool find7;
 int TH = 0, TH2 = 2 * TH1, TH_D;
@@ -96,9 +96,11 @@ bool(*pfindStart)(Point2i centerPt, Point2i &A, Point2i &B, Point2i &AC, Point2i
 
 int main(int agrc, char** agrv)
 {
+	
+
 	initMain();//first inital
 	//load srcImage
-	g_srcImage = imread(".\\sourcePicture\\test/1.jpg"); //noicePicture 2018 poisson.jpg saltpepper.bmp edgenoice.bmp gaussian.bmp
+	g_srcImage = imread(".\\sourcePicture\\test/1.jpg"); //CONTRADICTIONPicture 2018 poisson.jpg saltpepper.bmp edgeCONTRADICTION.bmp gaussian.bmp
 	//load success or not
 	if (!g_srcImage.data)
 	{
@@ -134,13 +136,13 @@ int main(int agrc, char** agrv)
 		cout << "the " << m << " th:" << TH1 << endl;
 		nTH = m;
 		//edge.edgeDection();
-		edge.edgeDetection1();
+		edge.edgeDetection3();
 
 		TH1 = TH1 + 2;
 		
 	}
-	outXls("./output/02 g_PType.xls", g_PType, "int");
-	outXls("./output/bigThanTh.xls", bigThanTh, "int");
+	/*outXls("./output/02 g_PType.xls", g_PType, "int");
+	outXls("./output/bigThanTh.xls", bigThanTh, "int");*/
 
 	cout << "g_numPixel=" << g_numPixel << endl;
 	g_srcGrayImage.convertTo(g_srcGrayImage, CV_32F);
@@ -152,11 +154,12 @@ int main(int agrc, char** agrv)
 
 	outXls("./output/gray.xls", g_srcGrayImage, "float");
 
-	outXls("./output/ntype.xls", g_nType, "int");
+	outXls("./output/ntype.xls", g_PType, "int");
 	outXls("./output/numPN.xls", g_PNdifference, "int");
 	outXls("./output/numPP.xls", g_PPdifference, "int");
 	outXls("./output/numPS.xls", g_PNumbOfS, "int");
-	
+	outXls("./output/imFlag.xls", g_imgFlg, "int");
+	outXls("./output/imgFlag2.xls", g_imgFlg2, "int");
 	g_maxGrad.convertTo(g_gradBmp, CV_8UC1);
 	imshow("梯度图", g_gradBmp);
 	imwrite("./output/grad.png", g_gradBmp);
@@ -169,3 +172,4 @@ int main(int agrc, char** agrv)
 	}
 	return 0;
 }
+

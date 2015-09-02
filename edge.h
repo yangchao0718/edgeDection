@@ -24,6 +24,18 @@ using namespace cv;
 #define BLUE_FLAG 0  //非0表示显示一类缓冲区域
 #define  LTH  0 
 #define  NPT 2
+#define SORT 0
+#define SEARCHlENGTH
+#define FOURCOLOR 10
+
+#define IDEASMALL  1
+#define IDEABIG  2
+#define BUFFERBIG 12
+#define BUFFERSMALL 11
+#define NOTBIG   32
+#define NOTSMALL 31
+#define INNER 0
+#define CONTRADICTION 5
 //用于保存最大最小值及其对应的下标结构体
 
 
@@ -52,7 +64,7 @@ extern int g_cannyLowThreshold;//TrackBar位置参数
 extern Mat gray;
 //YC边缘检测相关变量
 extern Mat g_listKS;//存放此方法边缘图
-extern Mat g_imgFlg;//图像标志位
+extern Mat g_imgFlg,g_imgFlg2,imgFlg3;//图像标志位
 extern Mat g_nSectionFlg;//区域划分处理标记
 extern Mat g_calImg;//转换了成了浮点数据类型的灰度值
 extern Mat g_calImg_I;
@@ -96,6 +108,7 @@ extern bool find7;
 extern int a8i[];
 extern int a8j[];
 //领域索引，备用
+extern int stretchTime;
 extern int a5[] ;
 extern int TH1;
 extern int TH , TH2, TH_D;
@@ -170,7 +183,7 @@ void controlFuction();//控制函数
 void initMain();//载入图像前的初始设置
 int nSection(Point2i centPt);
 float absAB_BGR(Point2i A1, Point2i A2);
-void deNoice(int row , int col);
+void deCONTRADICTION(int row , int col);
 double deviation(vector<float> v);
 bool isInsec(vector <int> &ind);
 bool isTag(Point2i centPt);
@@ -201,8 +214,18 @@ float sum(Mat mat, int n);
 //bool getSixPoints(Point2i A, Point2i B, vector<Point2i>& pt_same, vector<Point2i>& pt_diff, Vector<Point2i>& pt, int direction);
 float getSmaller(float centPt, float* pt_diff_next, bool min_max);
 void calcPixelAttribute(Point2i pt);
+void calcPixelAttribute_new(const Point2i pt);
 void calcStartPixelType(Point2i centerPt);
 void getN1();
 void InsertSort(int* array, int* index, int length);
 void SemiCirleEdge(vector<Point2i>&stretchD, Point2i B, Point2i D, int tag);
+void displayMixAttribute(Point2i pt,int th, int sortType, int buffer, int sameType, int numPP, int numPN, int numPS, bool big_small);
+int getSameFlagNumInFlag2(Point2i pt, int flag);
+Point2i getDegree1PrePoint(Point2i pt);
+bool traceEdge(Point2i A1, Point2i A2);
+//判断pt的8邻域是否有边缘点，即延伸过程中是否碰撞到了已有边
+bool isColision(Point2i pt);
+bool stretchEndPoint(Point2i pt_pre, Point2i pt);
+void setPointFlag(Point2i pt, vector<Point2i> big_section, vector<Point2i> small_section, int Flag);
+void setColor(Point2i pt,int B, int G, int R);
 #endif
